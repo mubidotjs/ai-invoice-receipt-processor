@@ -9,7 +9,10 @@ import {
   requestSchema,
   validateAIOutput,
   validateDocument,
+  OutputValidationError,
 } from '@invoice/shared';
+import { modelContent } from './model-output';
+export { modelContent } from './model-output';
 
 type Limiter = { limit(input: { key: string }): Promise<{ success: boolean }> };
 export interface Env {
@@ -172,28 +175,6 @@ async function verifyTurnstile(token: string, env: Env): Promise<void> {
   } finally {
     clearTimeout(timer);
   }
-}
-export function modelContent(output: unknown): unknown {
-  if (!output || typeof output !== 'object') throw new Error('Missing model output');
-  const envelope = output as {
-    choices?: { finish_reason?: string; message?: { content?: unknown; tool_calls?: unknown[] } }[];
-    response?: unknown;
-  };
-  let content: unknown;
-  if (envelope.choices) {
-    if (envelope.choices.length !== 1) throw new Error('Unexpected model choices');
-    const choice = envelope.choices[0]!;
-    if (choice.finish_reason && choice.finish_reason !== 'stop')
-      throw new Error('Incomplete model output');
-    if (choice.message?.tool_calls?.length) throw new Error('Unexpected tool request');
-    content = choice.message?.content;
-  } else content = envelope.response;
-  if (
-    typeof content !== 'string' ||
-    new TextEncoder().encode(content).byteLength > LIMITS.outputBytes
-  )
-    throw new Error('Invalid output size/type');
-  return JSON.parse(content);
 }
 function providerError(error: unknown): ApiError {
   if (error instanceof ApiError) return error;
@@ -363,7 +344,11 @@ export default {
           200,
           allowed,
         );
-      } catch {
+      } catch (error) {
+        // Only bounded, application-owned categories and allowlisted schema paths.
+        // Observability stays disabled; never log the error object, issues or provider content.
+        if (error instanceof OutputValidationError)
+          console.warn('AI_OUTPUT_REJECTED', error.diagnostic);
         throw new ApiError(
           'AI_INVALID_OUTPUT',
           'AI returned invalid or unsupported data. No draft was applied; continue manually.',

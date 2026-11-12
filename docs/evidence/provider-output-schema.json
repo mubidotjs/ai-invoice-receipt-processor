@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "documentType": {
+          "type": "string",
+          "enum": ["invoice", "receipt", "unknown"]
+        },
+        "vendorName": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "invoiceNumber": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receiptNumber": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issueDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dueDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["USD", "EUR", "GBP", "PKR"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lineItems": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "quantity": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})(\\.\\d{1,3})?$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "unitPrice": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})(\\.\\d{1,4})?$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "discountAmount": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lineTotal": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["description", "quantity", "unitPrice", "discountAmount", "lineTotal"],
+            "additionalProperties": false
+          }
+        },
+        "taxes": {
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "ratePercent": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})(\\.\\d{1,4})?$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "amount": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["label", "ratePercent", "amount"],
+            "additionalProperties": false
+          }
+        },
+        "subtotal": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "taxTotal": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "discountTotal": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "shipping": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tip": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9]\\d{0,8})\\.\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "taxMode": {
+          "type": "string",
+          "enum": ["exclusive", "inclusive", "unknown"]
+        },
+        "lineItemsComplete": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "documentType",
+        "vendorName",
+        "invoiceNumber",
+        "receiptNumber",
+        "issueDate",
+        "dueDate",
+        "currency",
+        "lineItems",
+        "taxes",
+        "subtotal",
+        "taxTotal",
+        "discountTotal",
+        "shipping",
+        "tip",
+        "total",
+        "taxMode",
+        "lineItemsComplete"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": ["path", "page", "quote"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["data", "evidence"],
+  "additionalProperties": false
+}

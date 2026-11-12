@@ -29,7 +29,12 @@ const successVerification = () =>
   );
 function setup() {
   const run = vi.fn().mockResolvedValue({
-    choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(modelDraft()) } }],
+    choices: [
+      {
+        finish_reason: 'stop',
+        message: { role: 'assistant', content: JSON.stringify(modelDraft()) },
+      },
+    ],
   });
   const visitor = vi.fn().mockResolvedValue({ success: true });
   const aggregate = vi.fn().mockResolvedValue({ success: true });
@@ -57,8 +62,14 @@ function request(body: unknown = payload(), headers: Record<string, string> = {}
     body: JSON.stringify(body),
   });
 }
-beforeEach(() => vi.stubGlobal('fetch', vi.fn().mockResolvedValue(successVerification())));
+beforeEach(() =>
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockImplementation(async () => successVerification()),
+  ),
+);
 afterEach(() => {
+  vi.restoreAllMocks();
   vi.unstubAllGlobals();
   vi.useRealTimers();
 });
@@ -136,6 +147,88 @@ describe('Worker admission and disabled defaults', () => {
   });
 });
 describe('mocked protection and model boundary', () => {
+  it.each([
+    [{ choices: [] }, 'envelope', 'unsupported_envelope', undefined],
+    [{ response: '{' }, 'json', 'invalid_json', undefined],
+    [
+      { response: { data: { private_key: 'DO_NOT_LOG' }, evidence: [] } },
+      'schema',
+      'invalid_structure',
+      '/data/documentType',
+    ],
+    [
+      {
+        response: {
+          ...modelDraft(),
+          evidence: [{ path: '/secret-financial-value', page: 1, quote: 'ACME' }],
+        },
+      },
+      'evidence',
+      'invalid_evidence_path',
+      '/evidence/0/path',
+    ],
+    [
+      { response: { ...modelDraft(), data: { ...modelDraft().data, total: 'private-123.456' } } },
+      'value',
+      'unsupported_value',
+      '/data/total',
+    ],
+    [
+      { response: { ...modelDraft(), data: { ...modelDraft().data, issueDate: '2026-02-30' } } },
+      'value',
+      'unsupported_value',
+      '/data/issueDate',
+    ],
+    [
+      { response: { ...modelDraft(), data: { ...modelDraft().data, currency: 'JPY' } } },
+      'value',
+      'unsupported_value',
+      '/data/currency',
+    ],
+    [{ response: 'x'.repeat(LIMITS.outputBytes + 1) }, 'limits', 'output_limit', undefined],
+  ])(
+    'keeps rejection diagnostics bounded and public messages unchanged',
+    async (output, stage, code, path) => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const s = setup();
+      s.run.mockResolvedValue(output);
+      const res = await handler.fetch(request(), s.env);
+      expect(res.status).toBe(502);
+      expect(await res.json()).toEqual({
+        error: {
+          code: 'AI_INVALID_OUTPUT',
+          message:
+            'AI returned invalid or unsupported data. No draft was applied; continue manually.',
+        },
+      });
+      expect(warn).toHaveBeenCalledExactlyOnceWith('AI_OUTPUT_REJECTED', {
+        stage,
+        code,
+        ...(path ? { path } : {}),
+      });
+      const logged = JSON.stringify(warn.mock.calls);
+      for (const privateValue of [
+        'DO_NOT_LOG',
+        'private_key',
+        'secret-financial-value',
+        'private-123.456',
+        '2026-02-30',
+        'JPY',
+        'ACME',
+        'mock-token',
+        s.env.TURNSTILE_SECRET!,
+      ])
+        expect(logged).not.toContain(privateValue);
+      expect(s.run).toHaveBeenCalledTimes(1);
+    },
+  );
+  it('structured Workers output still passes schema and evidence validation, never a bare-object bypass', async () => {
+    const s = setup();
+    s.run.mockResolvedValue({ response: modelDraft() });
+    expect((await handler.fetch(request(), s.env)).status).toBe(200);
+    s.run.mockResolvedValue({ response: { ...modelDraft(), evidence: [] } });
+    expect((await handler.fetch(request(), s.env)).status).toBe(502);
+  });
   it('returns a validated draft using one mocked model call', async () => {
     const s = setup();
     const res = await handler.fetch(request(), s.env);
@@ -322,9 +415,10 @@ describe('mocked protection and model boundary', () => {
     expect(JSON.parse(opts.messages[1].content).untrustedPages[0].text).toContain('evil.example');
     expect(vi.mocked(fetch).mock.calls).toHaveLength(1);
   });
-  it('accepts only documented string response envelopes', () => {
+  it('unwraps only documented response envelopes before strict data validation', () => {
     expect(modelContent({ response: '{"x":1}' })).toEqual({ x: 1 });
-    expect(() => modelContent({ response: {} })).toThrow();
+    expect(modelContent({ response: modelDraft() })).toEqual(modelDraft());
+    expect(() => modelContent(modelDraft())).toThrow();
     expect(() =>
       modelContent({ choices: [{ message: { content: '{}', tool_calls: [{}] } }] }),
     ).toThrow();

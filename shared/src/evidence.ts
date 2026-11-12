@@ -6,12 +6,13 @@ import {
   type TextPage,
 } from './schema';
 import { leafValues, scaled } from './validation';
+import { OutputValidationError, safeOutputPath, structuralDiagnostic } from './diagnostics';
 
 const flat = (v: string) => normalizeText(v).replace(/\s+/g, ' ').trim().toLowerCase();
 function supported(value: string, path: string, quote: string): boolean {
   const q = flat(quote);
   if (/\/(issueDate|dueDate)$/.test(path)) {
-    if (q.includes(value)) return true;
+    if (new RegExp(`(?<![\\d-])${value}(?![\\d-])`).test(q)) return true;
     const monthNames = [
       'january',
       'february',
@@ -26,19 +27,21 @@ function supported(value: string, path: string, quote: string): boolean {
       'november',
       'december',
     ];
-    const match =
-      q.match(/\b(\d{1,2})\s+([a-z]+)\s+(\d{4})\b/) ??
-      q.match(/\b([a-z]+)\s+(\d{1,2}),?\s+(\d{4})\b/);
-    if (!match) return false;
-    const firstDay = /^\d+$/.test(match[1]!);
-    const month = monthNames.findIndex(
-      (m) => m === match[firstDay ? 2 : 1] || m.slice(0, 3) === match[firstDay ? 2 : 1],
-    );
-    return (
-      month >= 0 &&
-      value ===
-        `${match[3]}-${String(month + 1).padStart(2, '0')}-${match[firstDay ? 1 : 2]!.padStart(2, '0')}`
-    );
+    const matches = [
+      ...q.matchAll(/\b(\d{1,2})\s+([a-z]+)\s+(\d{4})\b/g),
+      ...q.matchAll(/\b([a-z]+)\s+(\d{1,2}),?\s+(\d{4})\b/g),
+    ];
+    return matches.some((match) => {
+      const firstDay = /^\d+$/.test(match[1]!);
+      const month = monthNames.findIndex(
+        (m) => m === match[firstDay ? 2 : 1] || m.slice(0, 3) === match[firstDay ? 2 : 1],
+      );
+      return (
+        month >= 0 &&
+        value ===
+          `${match[3]}-${String(month + 1).padStart(2, '0')}-${match[firstDay ? 1 : 2]!.padStart(2, '0')}`
+      );
+    });
   }
   if (path === '/currency')
     return (
@@ -67,17 +70,33 @@ export function validateAIOutput(
   input: unknown,
   pages: TextPage[],
 ): { data: DocumentData; evidence: Evidence[] } {
-  const result = aiOutputSchema.parse(input);
+  const parsed = aiOutputSchema.safeParse(input);
+  if (!parsed.success) throw new OutputValidationError(structuralDiagnostic(parsed.error.issues));
+  const result = parsed.data;
   const values = leafValues(result.data);
   const validPaths = new Set(values.map(([p]) => p));
   result.data.lineItems.forEach((_, i) => validPaths.add(`/lineItems/${i}`));
   result.data.taxes.forEach((_, i) => validPaths.add(`/taxes/${i}`));
-  for (const e of result.evidence) {
-    if (
-      !validPaths.has(e.path) ||
-      !pages.some((p) => p.page === e.page && normalizeText(p.text).includes(e.quote))
-    )
-      throw new Error('Source evidence does not match the submitted text.');
+  for (const [i, e] of result.evidence.entries()) {
+    if (!validPaths.has(e.path))
+      throw new OutputValidationError({
+        stage: 'evidence',
+        code: 'invalid_evidence_path',
+        path: `/evidence/${i}/path`,
+      });
+    const page = pages.find((p) => p.page === e.page);
+    if (!page)
+      throw new OutputValidationError({
+        stage: 'evidence',
+        code: 'invalid_evidence_page',
+        path: `/evidence/${i}/page`,
+      });
+    if (!normalizeText(page.text).includes(e.quote))
+      throw new OutputValidationError({
+        stage: 'evidence',
+        code: 'invalid_evidence_quote',
+        path: `/evidence/${i}/quote`,
+      });
   }
   for (const [path, value] of values) {
     if (
@@ -89,12 +108,13 @@ export function validateAIOutput(
     const parent = /^\/(lineItems|taxes)\/\d+\//.test(path)
       ? path.slice(0, path.lastIndexOf('/'))
       : '';
-    if (
-      !result.evidence.some(
-        (e) => (e.path === path || e.path === parent) && supported(value, path, e.quote),
-      )
-    )
-      throw new Error(`Unsupported AI value at ${path}.`);
+    const candidates = result.evidence.filter((e) => e.path === path || e.path === parent);
+    if (!candidates.some((e) => supported(value, path, e.quote)))
+      throw new OutputValidationError({
+        stage: candidates.length ? 'value' : 'evidence',
+        code: candidates.length ? 'unsupported_value' : 'missing_evidence',
+        path: safeOutputPath(['data', ...path.slice(1).split('/')]),
+      });
   }
   return result;
 }

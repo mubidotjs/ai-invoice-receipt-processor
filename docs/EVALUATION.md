@@ -4,21 +4,25 @@ Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1*
 
 ## Observed checks
 
-| Check                     | Observed result                  | Verification boundary                                                                                                      |
-| ------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| TypeScript                | Passed                           | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
-| ESLint                    | Passed, zero warnings            | Authored source; generated caches/builds excluded                                                                          |
-| Vitest                    | **119 passed**, seven test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
-| Frontend build            | Passed                           | Vite production assets, lazy OCR/PDF imports                                                                               |
-| Worker bundle             | Passed                           | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
-| Playwright                | **18 passed**                    | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
-| Formatting                | Passed                           | Prettier check of source/config/docs                                                                                       |
-| Runtime dependency audit  | Zero findings                    | npm advisory database at evaluation time                                                                                   |
-| Complete dependency audit | Zero findings                    | Includes development tooling after the fixes described below                                                               |
-| Local workerd health      | HTTP 200, `liveEnabled:false`    | Actual local runtime only, no upstream call                                                                                |
-| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`     | Synthetic text only; no Siteverify or inference                                                                            |
+| Check                     | Observed result                 | Verification boundary                                                                                                      |
+| ------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript                | Passed                          | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
+| ESLint                    | Passed, zero warnings           | Authored source; generated caches/builds excluded                                                                          |
+| Vitest                    | **174 passed**, nine test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
+| Frontend build            | Passed                          | Vite production assets, lazy OCR/PDF imports                                                                               |
+| Worker bundle             | Passed                          | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
+| Playwright                | **18 passed**                   | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
+| Formatting                | Passed                          | Prettier check of source/config/docs                                                                                       |
+| Runtime dependency audit  | Zero findings                   | npm advisory database at evaluation time                                                                                   |
+| Complete dependency audit | Zero findings                   | Includes development tooling after the fixes described below                                                               |
+| Local workerd health      | HTTP 200, `liveEnabled:false`   | Actual local runtime only, no upstream call                                                                                |
+| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`    | Synthetic text only; no Siteverify or inference                                                                            |
 
 The fresh E1 `npm ci` and `npm run check` exited successfully: 102 Vitest and 18 browser tests (55.9s), types, lint and both builds. The first installation hit an owned preview process holding a native module; stopping that preview and rerunning `npm ci` resolved it. The fresh suite used its managed servers. Earlier A–D Windows verification had used separately started servers because teardown had lingered. [Hosted CI run 43160690098](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43160690098) also passed using Ubuntu managed servers, without cloud credentials/inference.
+
+## Offline Gate E2 correction
+
+The [diagnosis report](AI-OUTPUT-DIAGNOSIS.md) records demonstrated envelope/date defects and the unchanged provider schema. Fresh verification passed 174 unit/integration tests, 18 browser tests, types, lint, both builds, scoped formatting and a zero-finding full dependency audit. All model/protection successes in these new tests are constructed locally; this task made zero real model calls or production challenges. Production live AI remains disabled.
 
 ## Branded production / Gate E2 observations
 
