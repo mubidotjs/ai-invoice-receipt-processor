@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "2805871e22e08643d9b08aefcea82f2cf9a5b3ae",
+  "promptVersion": "invoice-v2-evidence",
+  "ci": "https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43259540928",
+  "local": {
+    "unitIntegrationTests": 264,
+    "browserTests": 18,
+    "actualPdfAndOcrEvidenceCompatibility": true,
+    "externalLocalRequests": 0,
+    "dependencyFindings": 0,
+    "validatorsUnchanged": true
+  },
+  "preflight": {
+    "workersFree": true,
+    "accountWideNeurons": 53.01,
+    "dailyAllocation": 10000,
+    "listenerReceivingBeforeSubmission": true,
+    "sanitizerSelfTests": true,
+    "wranglerDiskLogging": false,
+    "unchangedNativeBindingsAndControls": true
+  },
+  "tested": {
+    "workerVersion": "e7def8b5-2467-4cc4-bf25-7f8fcd33233c",
+    "vercelDeployment": "dpl_Df1wPo5cQsdGJuWibNfWCQrkyLYM",
+    "fixture": "harbor",
+    "actualLocalPdf": true,
+    "sourceAnchorsVerified": true,
+    "freshConsent": true,
+    "serverTurnstilePassedByHandlerOrder": true,
+    "nativeBindingAttempted": true,
+    "nativeInvocationReturned": false,
+    "acceptedDraft": false,
+    "modelFieldsVerified": false
+  },
+  "diagnostic": {
+    "event": "AI_INVOCATION_REJECTED",
+    "stage": "invocation",
+    "category": "unknown_invocation",
+    "errorName": "AiError"
+  },
+  "publicCode": "AI_UNAVAILABLE",
+  "actualInvocationAttempts": 1,
+  "saffronAiSubmitted": false,
+  "automaticRetries": 0,
+  "listenerStopped": true,
+  "final": {
+    "workerVersion": "121c2a72-36ba-4de0-8bbb-b3d72f9010ad",
+    "verifiedApplicationVercelDeployment": "dpl_5JQKxiSycFAZ1WQSnDnu5u4eMddx",
+    "workerLive": false,
+    "verifiedProtection": true,
+    "frontendProductionLive": false,
+    "frontendPreviewLive": false,
+    "localLive": false,
+    "healthStatus": 200
+  },
+  "gateE2": "blocked",
+  "manualProduction": {
+    "realSaffronOcr": true,
+    "preview": true,
+    "sourceAnchors": true,
+    "arithmeticWarningAndPass": true,
+    "invalidFormatBlocksExport": true,
+    "reviewResets": true,
+    "jsonBytesVerified": true,
+    "csvBytesVerified": true,
+    "manualProvenance": true,
+    "synthetic": true,
+    "noAdditionalInference": true
+  }
+}

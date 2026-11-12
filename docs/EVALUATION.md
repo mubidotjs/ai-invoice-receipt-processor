@@ -1,5 +1,7 @@
 # Evaluation and gate evidence
 
+Current follow-up: [evidence completeness and actual bounded outcome](EVIDENCE-COMPLETENESS.md). Offline actual-PDF/OCR evidence checks pass; the new Harbor call failed at invocation (`unknown_invocation`, `AiError`). No accepted real draft exists, Saffron AI was not submitted, and production remains disabled. Historical evaluation below is version-specific.
+
 Latest offline follow-up: [provider invocation diagnostics and reference-project comparison](PROVIDER-INVOCATION-DIAGNOSIS.md). This release keeps AI disabled, adds safe code/name classification and complete input byte checks, and makes no real inference call. Historical attempts below are retained.
 
 Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D and Gate E1 passed. The owner subsequently authorized the branded domain and Gate E2. **Real production Turnstile passed, but two bounded AI submissions yielded no accepted draft. Live AI is disabled; Gate E2 remains incomplete.** The historical E1 observations below are retained with their original verification boundary.
