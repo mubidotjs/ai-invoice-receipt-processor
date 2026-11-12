@@ -3,6 +3,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { PDFDocument } from 'pdf-lib';
+import { authoredDraft } from '../helpers/authored-evidence';
+import { validateAIOutput } from '../../shared/src/evidence';
 const external: string[] = [];
 async function blockExternal(context: BrowserContext) {
   await context.route('**/*', (route) => {
@@ -76,6 +78,16 @@ for (const fixture of fixtures)
       new RegExp(fixture.anchor),
     );
     await expect(page.getByAltText('Document preview, page 1')).toBeVisible();
+    if (fixture.id === 'harbor' || fixture.id === 'saffron') {
+      // Real PDF.js/Tesseract text, never the ideal authored transcription.
+      const text = await page.locator('#source-text').inputValue();
+      const { draft, pages } = authoredDraft(fixture.id, [{ page: 1, text }]);
+      expect(validateAIOutput(draft, pages).data).toEqual(draft.data);
+      expect(draft.evidence.every((e) => pages[e.page - 1]!.text.includes(e.quote))).toBe(true);
+      // Coverage remains mandatory on actual OCR text too.
+      draft.evidence = draft.evidence.filter((e) => e.path !== '/documentType');
+      expect(() => validateAIOutput(draft, pages)).toThrow('Model output was rejected.');
+    }
     expect(
       await page
         .getByAltText('Document preview, page 1')

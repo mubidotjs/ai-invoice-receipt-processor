@@ -1,50 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import expected from '../../fixtures/expected/documents.json';
+import { authoredDraft } from '../../tests/helpers/authored-evidence';
 import { validateAIOutput } from './evidence';
-import { blankDocument, type Evidence } from './schema';
+import { blankDocument } from './schema';
 import { OutputValidationError, safeOutputPath } from './diagnostics';
 import { validateDocument } from './validation';
-
-function authoredDraft(id: 'harbor' | 'saffron') {
-  const fixture = expected.find((f) => f.id === id)!;
-  const quote = (path: string, text: string): Evidence => ({ path, page: 1, quote: text });
-  const evidence = [
-    quote('/documentType', fixture.text[0]![1]!),
-    quote('/vendorName', fixture.text[0]![0]!),
-    quote(id === 'harbor' ? '/invoiceNumber' : '/receiptNumber', fixture.text[0]![1]!),
-    quote('/issueDate', 'Issue date: 2026-10-28'),
-    quote('/currency', `Currency: ${fixture.data.currency}`),
-    quote('/taxMode', 'Tax treatment: exclusive'),
-    ...[0, 1].flatMap((i) => [
-      quote(
-        `/lineItems/${i}`,
-        fixture.text[0]!.find((line) => line.startsWith(fixture.data.lineItems[i]!.description!))!,
-      ),
-      quote(`/lineItems/${i}/discountAmount`, 'Line discounts: 0.00'),
-    ]),
-    ...(['subtotal', 'taxTotal', 'discountTotal', 'shipping', 'tip', 'total'] as const).map(
-      (field) => {
-        const labels = {
-          subtotal: 'Subtotal:',
-          taxTotal: 'Tax total:',
-          discountTotal: 'Document discount:',
-          shipping: 'Shipping:',
-          tip: 'Tip:',
-          total: 'TOTAL ',
-        };
-        return quote(`/${field}`, fixture.text[0]!.find((line) => line.startsWith(labels[field]))!);
-      },
-    ),
-  ];
-  if (id === 'harbor') {
-    evidence.push(quote('/dueDate', 'Due date: 2026-11-27'));
-    evidence.push(quote('/taxes/0', 'Sales tax 10%: 15.00'));
-  }
-  return {
-    draft: { data: structuredClone(fixture.data), evidence },
-    pages: fixture.text.map((lines, i) => ({ page: i + 1, text: lines.join('\n') })),
-  };
-}
 
 describe('authored invoice/receipt output feasibility (deterministic; no provider)', () => {
   it.each(['harbor', 'saffron'] as const)('accepts every supported field/row in %s', (id) => {
@@ -64,6 +23,112 @@ describe('authored invoice/receipt output feasibility (deterministic; no provide
       ],
     };
     expect(validateAIOutput(draft, [{ page: 1, text }]).data.dueDate).toBe('2026-11-27');
+  });
+  it.each(['harbor', 'saffron'] as const)('rejects missing classification evidence in %s', (id) => {
+    const { draft, pages } = authoredDraft(id);
+    draft.evidence = draft.evidence.filter((e) => e.path !== '/documentType');
+    expect(() => validateAIOutput(draft, pages)).toThrowError(
+      new OutputValidationError({
+        stage: 'evidence',
+        code: 'missing_evidence',
+        path: '/data/documentType',
+      }),
+    );
+    try {
+      validateAIOutput(draft, pages);
+    } catch (e) {
+      expect((e as OutputValidationError).diagnostic).toEqual({
+        stage: 'evidence',
+        code: 'missing_evidence',
+        path: '/data/documentType',
+      });
+    }
+  });
+  it('rejects the diagnostic /data prefix as a model evidence pointer', () => {
+    const { draft, pages } = authoredDraft('harbor');
+    draft.evidence[0]!.path = '/data/documentType';
+    try {
+      validateAIOutput(draft, pages);
+      throw new Error('Expected rejection');
+    } catch (e) {
+      expect((e as OutputValidationError).diagnostic).toEqual({
+        stage: 'evidence',
+        code: 'invalid_evidence_path',
+        path: '/evidence/0/path',
+      });
+    }
+  });
+  it.each(['harbor', 'saffron'] as const)(
+    'rejects the wrong supported classification in %s',
+    (id) => {
+      const { draft, pages } = authoredDraft(id);
+      draft.data.documentType = id === 'harbor' ? 'receipt' : 'invoice';
+      try {
+        validateAIOutput(draft, pages);
+        throw new Error('Expected rejection');
+      } catch (e) {
+        expect((e as OutputValidationError).diagnostic).toEqual({
+          stage: 'value',
+          code: 'unsupported_value',
+          path: '/data/documentType',
+        });
+      }
+    },
+  );
+  it.each(['harbor', 'saffron'] as const)('requires separate tax-mode evidence in %s', (id) => {
+    const { draft, pages } = authoredDraft(id);
+    draft.evidence = draft.evidence.filter((e) => e.path !== '/taxMode');
+    try {
+      validateAIOutput(draft, pages);
+      throw new Error('Expected rejection');
+    } catch (e) {
+      expect((e as OutputValidationError).diagnostic).toEqual({
+        stage: 'evidence',
+        code: 'missing_evidence',
+        path: '/data/taxMode',
+      });
+    }
+  });
+  it('does not let one header excerpt cover a different populated header', () => {
+    const { draft, pages } = authoredDraft('harbor');
+    draft.evidence = draft.evidence.filter((e) => e.path !== '/dueDate');
+    try {
+      validateAIOutput(draft, pages);
+      throw new Error('Expected rejection');
+    } catch (e) {
+      expect((e as OutputValidationError).diagnostic).toEqual({
+        stage: 'evidence',
+        code: 'missing_evidence',
+        path: '/data/dueDate',
+      });
+    }
+  });
+  it('accepts mixed direct-field and row evidence; rejects an uncovered row value', () => {
+    const { draft, pages } = authoredDraft('harbor');
+    const row = draft.evidence.find((e) => e.path === '/lineItems/0')!;
+    draft.evidence = draft.evidence.filter((e) => e !== row);
+    for (const field of ['description', 'quantity', 'unitPrice', 'lineTotal'])
+      draft.evidence.push({ ...row, path: `/lineItems/0/${field}` });
+    expect(validateAIOutput(draft, pages).data).toEqual(draft.data);
+    draft.evidence = draft.evidence.filter((e) => e.path !== '/lineItems/0/unitPrice');
+    try {
+      validateAIOutput(draft, pages);
+      throw new Error('Expected rejection');
+    } catch (e) {
+      expect((e as OutputValidationError).diagnostic).toEqual({
+        stage: 'evidence',
+        code: 'missing_evidence',
+        path: '/data/lineItems/0/unitPrice',
+      });
+    }
+  });
+  it('preserves null, unknown enum and boolean evidence exemptions', () => {
+    const data = blankDocument();
+    expect(
+      validateAIOutput({ data, evidence: [] }, [
+        { page: 1, text: 'Unclassified synthetic document' },
+      ]).data,
+    ).toEqual(data);
   });
   it.each([
     ['path', '/private-value'],

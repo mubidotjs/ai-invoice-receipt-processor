@@ -190,6 +190,7 @@ export default {
             status: 'ok',
             schemaVersion: '1',
             model: MODEL,
+            promptVersion: PROMPT_VERSION,
             liveEnabled:
               env.LIVE_AI_ENABLED === 'true' &&
               env.ABUSE_CONTROLS_VERIFIED === 'true' &&

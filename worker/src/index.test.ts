@@ -7,7 +7,7 @@ import handler, {
   SYSTEM_PROMPT,
   type Env,
 } from './handler';
-import { blankDocument, MODEL, LIMITS } from '@invoice/shared';
+import { blankDocument, MODEL, PROMPT_VERSION, LIMITS } from '@invoice/shared';
 import { buildAiInput } from './ai-input';
 const origin = 'http://127.0.0.1:5401';
 const payload = () => ({
@@ -77,7 +77,11 @@ afterEach(() => {
 describe('Worker admission and disabled defaults', () => {
   it('health checks no upstream and defaults disabled', async () => {
     const res = await handler.fetch(new Request('http://worker.local/health'), {});
-    expect(await res.json()).toMatchObject({ liveEnabled: false, model: MODEL });
+    expect(await res.json()).toMatchObject({
+      liveEnabled: false,
+      model: MODEL,
+      promptVersion: PROMPT_VERSION,
+    });
     expect(fetch).not.toHaveBeenCalled();
   });
   it('disabled mode needs no credentials or remote calls', async () => {
