@@ -46,5 +46,36 @@
     "Turnstile credentials and verification",
     "native limiter thresholds and namespaces",
     "DNS and unrelated services"
-  ]
+  ],
+  "disabledRelease": {
+    "applicationCommit": "db21ea200f11034249e338d745d4628adebc8c99",
+    "ci": {
+      "run": "https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43212386396",
+      "conclusion": "success"
+    },
+    "vercel": {
+      "deployment": "dpl_CqSani8FpugrTvHrDYGjsvQWAVxE",
+      "state": "READY",
+      "node": "24.22.3",
+      "npm": "11.19.1"
+    },
+    "worker": {
+      "version": "8b045abd-dfe8-4379-b3c2-7b906d437333",
+      "etag": "41a4b4038eb6b6b248b1b58b8ea8d77f11a439fd815433c8e2df5897276a6d46",
+      "LIVE_AI_ENABLED": false,
+      "ABUSE_CONTROLS_VERIFIED": true,
+      "bindingsUnchanged": true
+    },
+    "publicRegression": "gate-e2-offline-production.json",
+    "favicon": {
+      "homepageStatus": 200,
+      "faviconStatus": 200,
+      "contentType": "image/svg+xml",
+      "committedBytesMatch": true,
+      "sha256": "4a5e5e146a878e7d9930d8c2351b3986b85d6220e9ff66a720851ffbf7c2c62c",
+      "originalHostnameStatus": 200
+    },
+    "realInference": false,
+    "realTurnstileChallenge": false
+  }
 }

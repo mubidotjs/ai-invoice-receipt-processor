@@ -49,6 +49,12 @@ The full suite passed: **174 unit/integration tests across nine files, 18 browse
 
 The favicon is a same-origin SVG matching the existing green L/dot brand mark; no font, CDN or generated raster dependency. Publication/deployment identities and final disabled public checks are recorded in the deployment record after release. The existing production controls stay unchanged, allowing ABUSE_CONTROLS_VERIFIED=true to remain truthful.
 
+## Disabled public release evidence
+
+Reviewed correction [PR 6](https://github.com/mubidotjs/ai-invoice-receipt-processor/pull/6) merged as db21ea200f11034249e338d745d4628adebc8c99; [main CI 43212386396](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43212386396) passed. Verified Vercel build dpl_CqSani8FpugrTvHrDYGjsvQWAVxE is READY on Node 24.22.3. Worker version 8b045abd-dfe8-4379-b3c2-7b906d437333 has LIVE_AI_ENABLED=false and ABUSE_CONTROLS_VERIFIED=true, with unchanged production controls. Frontend Production/Preview remain false.
+
+The [post-correction public report](evidence/gate-e2-offline-production.json) passed all six real local processing paths, twelve downloaded exports and all 228 same-origin runtime assets, plus bounded responsive/accessibility and disabled protection checks. The favicon is linked from production HTML, served as image/svg+xml and byte-identical to the committed SVG (Windows working-copy CRLF differs harmlessly from the Git blob's LF). A documentation-only successor may change the latest frontend deployment identity without changing this verified application bundle. No real inference or challenge was used for these checks.
+
 ## Smallest proposed future retest — not authorized here
 
 Request a new budget of **at most two sequential attempts**, Harbor invoice then Saffron receipt, with no automatic retry and immediate stop/disable on the first rejection. Recheck Free eligibility/shared quota/protection first. Use displayed synthetic text, fresh consent and legitimate protection; observe only sanitized stage/code/path metadata. Require accepted evidence-supported ground-truth comparisons and real-AI manual correction/downloads before claiming Gate E2. No historical unused slot is consumed or carried into this task.
