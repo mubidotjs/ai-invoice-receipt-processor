@@ -147,14 +147,29 @@ export async function extract(pages: TextPage[], token: string, signal: AbortSig
         LIVE_AI_DISABLED: 'Cloud AI is disabled. Continue with manual entry.',
         RATE_LIMITED: 'Too many requests. Wait before trying explicitly again.',
         AI_QUOTA_EXHAUSTED: 'The shared free AI quota is exhausted. Continue manually.',
+        AI_CAPACITY:
+          'Cloudflare model capacity is unavailable. Continue manually or retry explicitly later.',
+        AI_MODEL_UNAVAILABLE:
+          'The selected model is unavailable. No alternative model or paid fallback was selected.',
+        AI_UNAVAILABLE: 'The model request failed. No AI draft was applied; continue manually.',
+        PROTECTION_UNAVAILABLE:
+          'Cloudflare bot verification is unavailable. Local processing remains available.',
+        ORIGIN_REJECTED:
+          'This browser origin is not allowed. Continue manually while production configuration is reviewed.',
+        INPUT_TOO_LARGE:
+          'The structured AI input is too large. Shorten the displayed text explicitly or continue manually.',
+        INTERNAL_ERROR:
+          'The service could not process this request. No draft was applied; continue manually.',
         AI_INVALID_OUTPUT: 'AI output failed validation. No draft was applied; continue manually.',
         TURNSTILE_REJECTED: 'Verification expired or failed. Start a fresh attempt.',
         AI_TIMEOUT:
           'AI timed out. Provider computation may already have started. Continue manually.',
       };
+      const code = error.error?.code;
       throw new Error(
-        messages[error.error?.code ?? ''] ??
-          'Cloud extraction is unavailable. Your document and manual entries remain local.',
+        typeof code === 'string' && Object.hasOwn(messages, code)
+          ? `${messages[code]} (${code})`
+          : 'Cloud extraction is unavailable. Your document and manual entries remain local.',
       );
     }
     try {
