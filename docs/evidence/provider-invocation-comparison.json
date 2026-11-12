@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-12T15:16:23.547Z",
+  "reference": {
+    "repo": "mubidotjs/ai-release-notes-generator",
+    "commit": "df2e59a8cce3b2ddb58107cfa42281999d88dbdb",
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "workersTypes": "5.20261110.1",
+    "schema": {
+      "bytes": 654,
+      "sha256": "9a4c937f8ddbf491233ca2a353f6083ec5552a73c8af7b5daa5c55f7bbeed178",
+      "objects": 3,
+      "required": 6,
+      "nullable": 0,
+      "patterns": 1
+    },
+    "completionTokens": 4096,
+    "deadlineMs": 45000,
+    "outputLimit": "48000 JS characters",
+    "store": "omitted"
+  },
+  "ledger": {
+    "base": "d0ad0d0714281e1f3f5710b27bd12dea8ea932fa",
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "workersTypes": "5.20261110.1",
+    "schema": {
+      "bytes": 3601,
+      "sha256": "733d9032d659d1e18cf728d284101f58c88e4b11c3ac95b8907b636d1cb6c6bd",
+      "objects": 5,
+      "required": 30,
+      "nullable": 20,
+      "patterns": 14
+    },
+    "completionTokens": 6144,
+    "deadlineMs": 90000,
+    "outputLimit": "65536 UTF-8 bytes, full envelope",
+    "store": false
+  },
+  "same": {
+    "temperature": 0.1,
+    "stream": false,
+    "enableThinking": false,
+    "jsonSchema": {
+      "named": true,
+      "strict": true,
+      "schemaObject": true
+    }
+  },
+  "contract": {
+    "defectDemonstrated": false,
+    "publishedShapeChecks": "pass",
+    "providerServingGrammar": "not verified; no inference",
+    "jsonModeListOmitsGemma": true
+  },
+  "confirmedDefects": [
+    "Structured error.code/internalCode ignored by old classifier.",
+    "Invocation catch emitted no bounded diagnostic.",
+    "Broad message/HTTP-number heuristics could misclassify non-code text.",
+    "Prompt byte guard excluded some serialized provider options."
+  ],
+  "inferenceCalls": 0,
+  "referenceRepoModified": false,
+  "verification": {
+    "unitIntegration": 253,
+    "testFiles": 11,
+    "browser": 18,
+    "types": "pass",
+    "lint": "pass",
+    "frontendBuild": "pass",
+    "workerDryRun": "pass",
+    "format": "pass",
+    "dependencyAuditFindings": 0,
+    "cloud": "mocked only"
+  }
+}

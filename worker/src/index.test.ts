@@ -8,6 +8,7 @@ import handler, {
   type Env,
 } from './handler';
 import { blankDocument, MODEL, LIMITS } from '@invoice/shared';
+import { buildAiInput } from './ai-input';
 const origin = 'http://127.0.0.1:5401';
 const payload = () => ({
   schemaVersion: '1',
@@ -383,9 +384,9 @@ describe('mocked protection and model boundary', () => {
     expect(s.run).toHaveBeenCalledTimes(1);
   });
   it.each([
-    ['quota exhausted', 'AI_QUOTA_EXHAUSTED'],
-    ['3040 Out of capacity', 'AI_CAPACITY'],
-    ['5035 model unavailable', 'AI_MODEL_UNAVAILABLE'],
+    ['3036: private allocation detail', 'AI_QUOTA_EXHAUSTED'],
+    ['3040: private capacity detail', 'AI_CAPACITY'],
+    ['5035: private model detail', 'AI_MODEL_UNAVAILABLE'],
     ['private diagnostic', 'AI_UNAVAILABLE'],
   ])('sanitizes provider failure %s', async (providerMessage, code) => {
     const s = setup();
@@ -393,6 +394,99 @@ describe('mocked protection and model boundary', () => {
     const res = await handler.fetch(request(), s.env);
     expect(await res.json()).toMatchObject({ error: { code } });
     expect(s.run).toHaveBeenCalledTimes(1);
+  });
+  it.each([
+    [3003, 'AI_INVALID_PARAMETERS', 'invalid_parameters'],
+    [3006, 'AI_INVALID_PARAMETERS', 'invalid_parameters'],
+    [3007, 'AI_TIMEOUT', 'timeout'],
+    [3008, 'AI_TIMEOUT', 'timeout'],
+    [3023, 'AI_REQUEST_REJECTED', 'request_rejected'],
+    [3036, 'AI_QUOTA_EXHAUSTED', 'quota_exhausted'],
+    [3040, 'AI_CAPACITY', 'capacity'],
+    [3041, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [3042, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [5004, 'AI_INVALID_PARAMETERS', 'invalid_parameters'],
+    [5007, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [5016, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [5018, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [5019, 'AI_INVALID_PARAMETERS', 'invalid_parameters'],
+    [5028, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+    [5035, 'AI_MODEL_UNAVAILABLE', 'model_unavailable'],
+  ] as const)(
+    'logs only allowlisted invocation metadata for structured provider code %s',
+    async (providerCode, publicCode, category) => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const s = setup();
+      s.run.mockRejectedValue(
+        Object.assign(new Error('private-source private-response private-token 999.99'), {
+          name: 'AiError',
+          code: providerCode,
+        }),
+      );
+      const res = await handler.fetch(request(), s.env);
+      const body = await res.text();
+      expect(JSON.parse(body)).toMatchObject({ error: { code: publicCode } });
+      expect(warn).toHaveBeenCalledExactlyOnceWith('AI_INVOCATION_REJECTED', {
+        stage: 'invocation',
+        category,
+        reason: 'provider_code',
+        errorName: 'AiError',
+        providerCode,
+        codeSource: 'code',
+      });
+      expect(body + JSON.stringify(warn.mock.calls)).not.toMatch(/private-|999\.99/);
+      expect(s.run).toHaveBeenCalledTimes(1);
+    },
+  );
+  it('separates structured generation failure from unknown invocation and post-invocation rejection', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const s = setup();
+    s.run.mockRejectedValueOnce(new Error("JSON Mode couldn't be met"));
+    expect(await (await handler.fetch(request(), s.env)).json()).toMatchObject({
+      error: { code: 'AI_JSON_GENERATION_FAILED' },
+    });
+    expect(warn.mock.calls[0]).toMatchObject([
+      'AI_INVOCATION_REJECTED',
+      { category: 'json_generation_failed' },
+    ]);
+    warn.mockClear();
+    s.run.mockRejectedValueOnce({ code: 9999, name: 'private-name', message: 'private-source' });
+    expect(await (await handler.fetch(request(), s.env)).json()).toMatchObject({
+      error: { code: 'AI_UNAVAILABLE' },
+    });
+    expect(warn).toHaveBeenCalledExactlyOnceWith('AI_INVOCATION_REJECTED', {
+      stage: 'invocation',
+      category: 'unknown_invocation',
+      reason: 'unknown_code',
+      errorName: 'unknown',
+    });
+    warn.mockClear();
+    s.run.mockResolvedValueOnce({ response: '{' });
+    expect(await (await handler.fetch(request(), s.env)).json()).toMatchObject({
+      error: { code: 'AI_INVALID_OUTPUT' },
+    });
+    expect(warn).toHaveBeenCalledExactlyOnceWith('AI_OUTPUT_REJECTED', {
+      stage: 'json',
+      code: 'invalid_json',
+    });
+    expect(s.run).toHaveBeenCalledTimes(3); // Three separate mocked requests, no retry.
+  });
+  it('bounds the complete serialized input, including provider options, before invocation', async () => {
+    const bytes = (v: unknown) => new TextEncoder().encode(JSON.stringify(v)).byteLength;
+    const base = bytes(buildAiInput([{ page: 1, text: '' }]));
+    const text = '€'.repeat(Math.floor((LIMITS.promptBytes - base) / 3) + 1);
+    const p = { ...payload(), pages: [{ page: 1, text }] };
+    const input = buildAiInput(p.pages);
+    expect(text.length).toBeLessThan(LIMITS.aiChars);
+    expect(bytes(input)).toBeGreaterThan(LIMITS.promptBytes);
+    expect(
+      bytes({ messages: input.messages, schema: input.response_format.json_schema.schema }),
+    ).toBeLessThanOrEqual(LIMITS.promptBytes);
+    const s = setup();
+    const res = await handler.fetch(request(p), s.env);
+    expect(res.status).toBe(413);
+    expect(await res.json()).toMatchObject({ error: { code: 'INPUT_TOO_LARGE' } });
+    expect(s.run).not.toHaveBeenCalled();
   });
   it('does not retry a timed-out binding', async () => {
     vi.useFakeTimers();
@@ -402,6 +496,7 @@ describe('mocked protection and model boundary', () => {
     await vi.advanceTimersByTimeAsync(90001);
     const res = await pending;
     expect(res.status).toBe(504);
+    expect(await res.json()).toMatchObject({ error: { code: 'AI_TIMEOUT' } });
     expect(s.run).toHaveBeenCalledTimes(1);
   });
   it('separates injected OCR instructions from the fixed prompt', async () => {

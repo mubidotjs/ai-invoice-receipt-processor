@@ -1,5 +1,7 @@
 # Evaluation and gate evidence
 
+Latest offline follow-up: [provider invocation diagnostics and reference-project comparison](PROVIDER-INVOCATION-DIAGNOSIS.md). This release keeps AI disabled, adds safe code/name classification and complete input byte checks, and makes no real inference call. Historical attempts below are retained.
+
 Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D and Gate E1 passed. The owner subsequently authorized the branded domain and Gate E2. **Real production Turnstile passed, but two bounded AI submissions yielded no accepted draft. Live AI is disabled; Gate E2 remains incomplete.** The historical E1 observations below are retained with their original verification boundary.
 
 ## Latest authorized real acceptance result
@@ -10,19 +12,19 @@ The [post-rollback disabled public regression](evidence/gate-e2-final-local-prod
 
 ## Observed checks
 
-| Check                     | Observed result                 | Verification boundary                                                                                                      |
-| ------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| TypeScript                | Passed                          | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
-| ESLint                    | Passed, zero warnings           | Authored source; generated caches/builds excluded                                                                          |
-| Vitest                    | **174 passed**, nine test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
-| Frontend build            | Passed                          | Vite production assets, lazy OCR/PDF imports                                                                               |
-| Worker bundle             | Passed                          | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
-| Playwright                | **18 passed**                   | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
-| Formatting                | Passed                          | Prettier check of source/config/docs                                                                                       |
-| Runtime dependency audit  | Zero findings                   | npm advisory database at evaluation time                                                                                   |
-| Complete dependency audit | Zero findings                   | Includes development tooling after the fixes described below                                                               |
-| Local workerd health      | HTTP 200, `liveEnabled:false`   | Actual local runtime only, no upstream call                                                                                |
-| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`    | Synthetic text only; no Siteverify or inference                                                                            |
+| Check                     | Observed result               | Verification boundary                                                                                                      |
+| ------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript                | Passed                        | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
+| ESLint                    | Passed, zero warnings         | Authored source; generated caches/builds excluded                                                                          |
+| Vitest                    | **253 passed**, 11 test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
+| Frontend build            | Passed                        | Vite production assets, lazy OCR/PDF imports                                                                               |
+| Worker bundle             | Passed                        | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
+| Playwright                | **18 passed**                 | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
+| Formatting                | Passed                        | Prettier check of source/config/docs                                                                                       |
+| Runtime dependency audit  | Zero findings                 | npm advisory database at evaluation time                                                                                   |
+| Complete dependency audit | Zero findings                 | Includes development tooling after the fixes described below                                                               |
+| Local workerd health      | HTTP 200, `liveEnabled:false` | Actual local runtime only, no upstream call                                                                                |
+| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`  | Synthetic text only; no Siteverify or inference                                                                            |
 
 The fresh E1 `npm ci` and `npm run check` exited successfully: 102 Vitest and 18 browser tests (55.9s), types, lint and both builds. The first installation hit an owned preview process holding a native module; stopping that preview and rerunning `npm ci` resolved it. The fresh suite used its managed servers. Earlier A–D Windows verification had used separately started servers because teardown had lingered. [Hosted CI run 43160690098](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43160690098) also passed using Ubuntu managed servers, without cloud credentials/inference.
 

@@ -1,5 +1,7 @@
 # Deployment and production launch outcome
 
+Latest offline follow-up: [provider invocation diagnostics and reference-project comparison](PROVIDER-INVOCATION-DIAGNOSIS.md). This release keeps AI disabled, adds safe code/name classification and complete input byte checks, and makes no real inference call. Historical attempts below are retained.
+
 Verified **2026-11-12**. The owner authorized the branded domain and Gate E2. **The branded local demonstration is available; Gate E2 live AI acceptance is blocked and inference has been disabled again.** Real protection passed. Neither bounded AI submission yielded an accepted draft, so no real model field-accuracy or successful AI-correction claim is made.
 
 An [offline diagnosis and narrowly scoped correction](AI-OUTPUT-DIAGNOSIS.md) follows this historical launch record. It adds content-free rejection categories and a favicon without enabling AI. Historical failures below remain unsubstantiated at the detailed output stage.
