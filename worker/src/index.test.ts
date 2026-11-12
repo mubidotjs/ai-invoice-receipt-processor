@@ -276,8 +276,23 @@ describe('mocked protection and model boundary', () => {
     expect(s.run).not.toHaveBeenCalled();
     const args = vi.mocked(fetch).mock.calls[0]!;
     expect(args[0]).toBe('https://challenges.cloudflare.com/turnstile/v0/siteverify');
+    expect(args[1]?.redirect).toBe('manual');
     expect(args[1]?.body).not.toContain('ACME');
   });
+  it.each([301, 302, 303, 307, 308])(
+    'refuses Siteverify redirect HTTP %s without forwarding credentials',
+    async (status) => {
+      const s = setup();
+      vi.mocked(fetch).mockResolvedValue(
+        new Response('{}', { status, headers: { Location: 'https://unapproved.invalid' } }),
+      );
+      const res = await handler.fetch(request(), s.env);
+      expect(res.status).toBe(503);
+      expect(vi.mocked(fetch).mock.calls).toHaveLength(1);
+      expect(vi.mocked(fetch).mock.calls[0]![1]?.redirect).toBe('manual');
+      expect(s.run).not.toHaveBeenCalled();
+    },
+  );
   it.each(['invalid-input-response', 'missing-input-response', 'timeout-or-duplicate'])(
     'rejects a real HTTP 400 Siteverify token failure %s without inference',
     async (code) => {

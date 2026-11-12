@@ -131,7 +131,7 @@ async function verifyTurnstile(
   try {
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      redirect: 'error',
+      redirect: 'manual',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
       signal: controller.signal,
@@ -140,6 +140,8 @@ async function verifyTurnstile(
       diagnostic.httpStatus = res.status;
       diagnostic.stage = 'body';
     }
+    if (res.status >= 300 && res.status < 400)
+      throw new ApiError('PROTECTION_UNAVAILABLE', 'Bot verification redirects are refused.', 503);
     const body = JSON.parse(await readBounded(res, 8192));
     if (diagnostic) diagnostic.stage = 'schema';
     const verified = verifySchema.safeParse(body);
