@@ -114,7 +114,10 @@ const verifySchema = z.object({
   action: z.string().optional(),
   challenge_ts: z.iso.datetime().optional(),
 });
-async function verifyTurnstile(token: string, env: Env): Promise<void> {
+async function verifyTurnstile(
+  token: string,
+  env: Env,
+): Promise<{ hostname: string; action: string }> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
@@ -143,6 +146,7 @@ async function verifyTurnstile(token: string, env: Env): Promise<void> {
         'Bot verification failed or expired. Complete a fresh challenge.',
         403,
       );
+    return { hostname: verified.data.hostname!, action: verified.data.action! };
   } catch (error) {
     if (error instanceof ApiError) throw error;
     throw new ApiError(
@@ -236,7 +240,7 @@ export default {
           headers: {
             'Access-Control-Allow-Origin': origin,
             'Access-Control-Allow-Methods': 'POST',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Ledger-Protection-Check',
             Vary: 'Origin',
             'Cache-Control': 'no-store',
           },
@@ -281,6 +285,22 @@ export default {
       } catch (e) {
         if (e instanceof ApiError) throw e;
         throw new ApiError('PROTECTION_UNAVAILABLE', 'Request protection is unavailable.', 503);
+      }
+      // Temporary authorized E2 probe: remove before activation. It cannot reach AI.
+      if (request.headers.get('X-Ledger-Protection-Check') === '1') {
+        if (
+          env.LIVE_AI_ENABLED !== 'false' ||
+          env.ABUSE_CONTROLS_VERIFIED !== 'false' ||
+          !configured(env) ||
+          !ip
+        )
+          throw new ApiError(
+            'PROTECTION_UNAVAILABLE',
+            'Disabled verification is not configured.',
+            503,
+          );
+        const verified = await verifyTurnstile(parsed.data.turnstileToken, env);
+        return json({ status: 'protection-verified', ...verified, inference: false }, 200, allowed);
       }
       if (env.LIVE_AI_ENABLED !== 'true')
         throw new ApiError(

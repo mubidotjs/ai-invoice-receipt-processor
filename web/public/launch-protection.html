@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ledger Lens — temporary launch protection check</title>
+    <script type="module" src="/launch-protection.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Temporary Ledger Lens launch verification</h1>
+      <p>
+        Live AI is disabled. This check verifies Turnstile on the deployed Worker and cannot invoke
+        a model. No document or OCR text is used.
+      </p>
+      <label
+        ><input id="consent" type="checkbox" /> I approve sending a synthetic protection check and
+        Turnstile token to Cloudflare.</label
+      >
+      <p><button id="verify" type="button">Verify production protection</button></p>
+      <div id="challenge"></div>
+      <p><button id="replay" type="button" disabled>Check rejected token replay</button></p>
+      <p><button id="invalid" type="button">Check invalid token rejection</button></p>
+      <pre id="result" role="status" aria-live="polite">No verification performed.</pre>
+      <a href="/">Return to Ledger Lens</a>
+    </main>
+  </body>
+</html>

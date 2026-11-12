@@ -19,8 +19,8 @@
       "vars": {
         "LIVE_AI_ENABLED": "false",
         "ABUSE_CONTROLS_VERIFIED": "false",
-        "ALLOWED_ORIGINS": "https://ai-invoice-receipt-processor.vercel.app",
-        "TURNSTILE_HOSTNAMES": "ai-invoice-receipt-processor.vercel.app",
+        "ALLOWED_ORIGINS": "https://invoice.mubashirhussain.dev,https://ai-invoice-receipt-processor.vercel.app",
+        "TURNSTILE_HOSTNAMES": "invoice.mubashirhussain.dev,ai-invoice-receipt-processor.vercel.app",
       },
       "ai": { "binding": "AI" },
       "unsafe": {
