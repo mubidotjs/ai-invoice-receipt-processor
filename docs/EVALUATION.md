@@ -2,6 +2,12 @@
 
 Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D and Gate E1 passed. The owner subsequently authorized the branded domain and Gate E2. **Real production Turnstile passed, but two bounded AI submissions yielded no accepted draft. Live AI is disabled; Gate E2 remains incomplete.** The historical E1 observations below are retained with their original verification boundary.
 
+## Latest authorized real acceptance result
+
+A fresh two-slot production run stopped after its **first** guarded Harbor submission returned **AI_UNAVAILABLE / HTTP 502 at native model invocation**. Output validation was not reached and no safe output-rejection event appeared. Saffron was not attempted. One attempt was conservatively counted; no historical unused slot was reused. Production Worker/frontend flags were redeployed false; verified protection stayed true, Preview/local false. [Final evidence and rollback](DEPLOYMENT.md) and [sanitized attempt record](evidence/gate-e2-final.json) preserve the exact limits. Zero accepted drafts, model comparisons or real-AI correction/export successes are claimed.
+
+The [post-rollback disabled public regression](evidence/gate-e2-final-local-production.json) passed all six real local OCR/PDF paths, twelve manual exports, bundled asset hashes and bounded responsive/security checks. It made no model or Turnstile call. Source code/contracts/credentials/limits were unchanged. Provider-specific failure classification remains unknown; a content-free invocation diagnostic is the next justified step before another separately authorized attempt.
+
 ## Observed checks
 
 | Check                     | Observed result                 | Verification boundary                                                                                                      |

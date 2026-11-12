@@ -1,0 +1,118 @@
+{
+  "startedAt": "2026-11-12T12:19:58.660Z",
+  "baseCommit": "bbd7f90ced4ba3fd00afd0431e2cda8649b0070f",
+  "baselineWorker": "8b045abd-dfe8-4379-b3c2-7b906d437333",
+  "baselineFrontend": "dpl_H1ZL6UxsczKaNMByD6LRFWsPNgfB",
+  "workersPlan": "Free, current plan, $0 confirmed in dashboard",
+  "freeEligibilitySource": "https://developers.cloudflare.com/changelog/post/2026-07-28-models-require-workers-paid/",
+  "quotaBefore": {
+    "today": 24.81,
+    "allocation": 10000,
+    "last24hGemma": 56.79,
+    "scope": "shared account/asynchronous; no attributable per-call cost claim"
+  },
+  "productionWidget": {
+    "existingSitekey": true,
+    "mode": "managed",
+    "preclearance": false,
+    "hostnames": ["invoice.mubashirhussain.dev", "ai-invoice-receipt-processor.vercel.app"],
+    "secretUnchanged": true
+  },
+  "limiters": {
+    "visitor": {
+      "namespace": "12001",
+      "limit": 2,
+      "period": 60
+    },
+    "aggregate": {
+      "namespace": "12002",
+      "limit": 5,
+      "period": 60,
+      "scope": "per Cloudflare location; approximate"
+    }
+  },
+  "activatedWorker": "8c1d78cc-2199-4ca3-b899-35b28c1b0680",
+  "activationFrontend": "dpl_72jFd87pa6S8yQPs9JKp1xtd5M7H",
+  "sourceConfigTemporarilyUnchanged": true,
+  "modelAttempts": [
+    {
+      "sequence": 1,
+      "fixture": "harbor",
+      "localMethod": "PDF text",
+      "sourceCharacters": 513,
+      "sourceAnchorsMatch": true,
+      "consentInitiallyUnchecked": true,
+      "freshConsentGiven": true,
+      "protection": "Passed by handler-order inference: model invocation is reachable only after successful hostname/action Siteverify validation.",
+      "stage": "invocation",
+      "publicCode": "AI_UNAVAILABLE",
+      "httpStatus": 502,
+      "workerOutcome": "ok (handled error)",
+      "outputValidationDiagnostic": null,
+      "acceptedDraft": false,
+      "generationOccurred": "Not substantiated; the native binding invocation failed.",
+      "fieldComparisons": "Not possible: no accepted model draft.",
+      "realAiCorrectionAndExports": "Not performed: no accepted model draft."
+    }
+  ],
+  "completedAt": "2026-11-12T12:28:21.413Z",
+  "status": "gate-e2-incomplete; production AI disabled",
+  "budget": {
+    "authorizedMaximum": 2,
+    "order": ["harbor", "saffron"],
+    "stopOnFirstFailure": true,
+    "attempts": [
+      {
+        "sequence": 1,
+        "fixture": "harbor",
+        "state": "failed; no accepted draft",
+        "reservedAt": "2026-11-12T12:21:11.380Z",
+        "localExtraction": {
+          "method": "PDF text",
+          "characters": 513,
+          "sourceAnchorsMatch": true,
+          "reviewInitiallyBlank": true,
+          "consentInitiallyUnchecked": true
+        },
+        "publicCode": "AI_UNAVAILABLE",
+        "safeStage": "invocation",
+        "outputDiagnosticEmitted": false,
+        "workerStatus": 502,
+        "observedAt": "2026-11-12T12:23:01.494Z"
+      }
+    ],
+    "historicalSlotReused": false,
+    "stopped": true,
+    "remainingUnused": 1,
+    "stopReason": "First authorized Harbor attempt failed; Saffron not submitted."
+  },
+  "saffron": "Not submitted; stopped after first failed attempt.",
+  "rollback": {
+    "workerVersion": "1cd6a820-d322-4691-826f-daf5f717ef63",
+    "frontendDeployment": "dpl_78jy6xHXBwygaVfP312sbb9u7Fe6",
+    "frontendReady": true,
+    "node": "24.22.3",
+    "healthStatus": 200,
+    "liveEnabled": false,
+    "dashboardReadback": true,
+    "browserDisabledBadge": true,
+    "LIVE_AI_ENABLED": false,
+    "ABUSE_CONTROLS_VERIFIED": true,
+    "VITE_LIVE_AI_ENABLED": {
+      "production": false,
+      "preview": false,
+      "localDefault": false
+    }
+  },
+  "quotaAfter": {
+    "today": 24.81,
+    "allocation": 10000,
+    "last24hGemma": 56.79,
+    "interpretation": "Shared/asynchronous metrics unchanged at immediate readback; no attributable per-call usage or charge claim."
+  },
+  "rawContentRetained": false,
+  "diagnosticRetention": "Only fixed request statuses/outcome and safe stage/code; no document text, prompts, provider response bodies, field values, secrets or tokens.",
+  "nextFix": "Add a bounded invocation diagnostic from explicitly allowlisted provider error names/numeric codes or unknown, with no error message/body, then offline-test the exact request contract. No schema/model/protection changes are justified by this generic failure alone.",
+  "nextInferenceAuthorized": false,
+  "localRegression": "gate-e2-final-local-production.json"
+}

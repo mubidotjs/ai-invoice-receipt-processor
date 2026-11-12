@@ -4,6 +4,20 @@ Verified **2026-11-12**. The owner authorized the branded domain and Gate E2. **
 
 An [offline diagnosis and narrowly scoped correction](AI-OUTPUT-DIAGNOSIS.md) follows this historical launch record. It adds content-free rejection categories and a favicon without enabling AI. Historical failures below remain unsubstantiated at the detailed output stage.
 
+## Final bounded Gate E2 attempt — stopped and disabled
+
+The owner authorized a fresh maximum of two sequential attempts, Harbor then Saffron, stopping on the first failure. Preflight reconfirmed Workers Free, exact-model Free eligibility, shared usage 24.81/10,000 neurons, exact widget hostnames, encrypted unchanged secret and independent native limits. No DNS, credential, billing, model or protection change occurred.
+
+The corrected application commit bbd7f90ced4ba3fd00afd0431e2cda8649b0070f was activated as Worker **8c1d78cc-2199-4ca3-b899-35b28c1b0680** and a fresh Git-source Vercel build **dpl_72jFd87pa6S8yQPs9JKp1xtd5M7H**. Health, dashboard and browser UI confirmed true production flags; Preview/local remained disabled. No old disabled artifact was promoted.
+
+Harbor was processed with actual native PDF text extraction (513 characters). Expected source anchors were checked without retaining outbound text. The review form was blank and consent initially unchecked. One fresh consented UI submission completed protection and reached native model invocation. It returned **HTTP 502 / AI_UNAVAILABLE**. The sanitized tail observed a handled Worker outcome and no AI_OUTPUT_REJECTED event. Handler order establishes **invocation-stage failure before model-content/JSON/schema/evidence acceptance**, not a particular provider root cause. No model body, secret, token, OCR text or financial field value was captured. No accepted draft, model field comparison or real-AI correction/export was possible. Actual model generation is unsubstantiated; the binding attempt counts conservatively as one.
+
+Testing stopped immediately. **Saffron was not submitted; the second slot and all historical unused slots remained unused.** Worker LIVE_AI_ENABLED=false was redeployed as **1cd6a820-d322-4691-826f-daf5f717ef63**. Production VITE_LIVE_AI_ENABLED=false was rebuilt as **dpl_78jy6xHXBwygaVfP312sbb9u7Fe6**, READY on Node 24.22.3. Health, dashboard flags and actual AI DISABLED browser UI passed. ABUSE_CONTROLS_VERIFIED=true remains accurate with unchanged controls; Production/Preview/local live flags are false.
+
+The [final sanitized attempt record](evidence/gate-e2-final.json) and [post-rollback local production regression](evidence/gate-e2-final-local-production.json) separate this failed real invocation from the six successful local OCR/PDF workflows, twelve manual JSON/CSV downloads and 228 same-origin asset checks. Those local successes do not complete E2. Immediate shared usage readback remained 24.81/10,000 today and 56.79 on the last-24h Gemma chart; asynchronous account-wide metrics cannot attribute this attempt's consumption.
+
+The smallest justified next correction is **content-free invocation diagnostics** using allowlisted provider error names/numeric codes or unknown, never messages/bodies, followed by offline request-contract checks. The present evidence does not justify changing schema, model, completion limit or protection. No further inference is authorized in this run. Gate E2 remains incomplete.
+
 ## Current verified resources
 
 | Resource                         | Verified identity / result                                                                                                                                                                                                  |
@@ -13,11 +27,11 @@ An [offline diagnosis and narrowly scoped correction](AI-OUTPUT-DIAGNOSIS.md) fo
 | Repository                       | [mubidotjs/ai-invoice-receipt-processor](https://github.com/mubidotjs/ai-invoice-receipt-processor), protected main; required check, no force push                                                                          |
 | Verified application source      | db21ea200f11034249e338d745d4628adebc8c99; [CI 43212386396](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43212386396) passed: 174 unit/integration tests, 18 browser tests, types, lint and builds |
 | Vercel project                   | ai-invoice-receipt-processor, prj_hRfp70QSVa7ab6XvU1R1PcpxFIRB, personal mubidotjs-projects scope, Hobby                                                                                                                    |
-| Verified disabled frontend build | dpl_CqSani8FpugrTvHrDYGjsvQWAVxE, READY; both public hosts associated; application commit above                                                                                                                             |
+| Verified disabled frontend build | dpl_78jy6xHXBwygaVfP312sbb9u7Fe6, READY; both public hosts associated; application commit above                                                                                                                             |
 | Actual hosted toolchain          | Build logs: Node v24.22.3, npm 11.19.1                                                                                                                                                                                      |
 | Build                            | Root install: node --version && npm --version && npm ci --cache .npm-cache; build: npm run assets && npm run build -w web; output web/dist; static assets only                                                              |
 | Worker                           | [health](https://ai-invoice-receipt-processor.mubikhan69.workers.dev/health), existing service ai-invoice-receipt-processor                                                                                                 |
-| Current safe Worker version      | 8b045abd-dfe8-4379-b3c2-7b906d437333; health 200, liveEnabled false                                                                                                                                                         |
+| Current safe Worker version      | 1cd6a820-d322-4691-826f-daf5f717ef63; health 200, liveEnabled false                                                                                                                                                         |
 | Worker flags                     | LIVE_AI_ENABLED=false; ABUSE_CONTROLS_VERIFIED=true (real protection verified)                                                                                                                                              |
 | Frontend flag                    | VITE_LIVE_AI_ENABLED=false in Production and Preview; local default false                                                                                                                                                   |
 | Production public configuration  | VITE_WORKER_URL is the existing Ledger Lens Worker; VITE_TURNSTILE_SITE_KEY is 0x4AAAAAAF9u_exNZlyI1Aql; no browser secret                                                                                                  |
@@ -94,7 +108,7 @@ On Windows, use the workspace .cache/browsers path for PLAYWRIGHT_BROWSERS_PATH.
 
 ## Rollback and remaining launch requirements
 
-Current corrected safe state is the rollback target: Worker **8b045abd-dfe8-4379-b3c2-7b906d437333**, disabled frontend build **dpl_CqSani8FpugrTvHrDYGjsvQWAVxE**, branded DNS retained. The earlier safe Worker c8b89a14-9973-4820-92d4-273459c12343 remains a disabled fallback without the offline corrections. Do not restore the original E1 Worker if doing so would remove the branded allowlist.
+Current corrected safe state is the rollback target: Worker **1cd6a820-d322-4691-826f-daf5f717ef63**, disabled frontend build **dpl_78jy6xHXBwygaVfP312sbb9u7Fe6**, branded DNS retained. The earlier safe Worker c8b89a14-9973-4820-92d4-273459c12343 remains a disabled fallback without the offline corrections. Do not restore the original E1 Worker if doing so would remove the branded allowlist.
 
 To stop new inference, set only this Worker's LIVE_AI_ENABLED=false and deploy the reviewed production configuration from worker/ with node scripts/wrangler.mjs deploy --env production. Set this project's Production VITE_LIVE_AI_ENABLED=false and rebuild/redeploy the existing Vercel project; environment edits alone do not update static assets. Leave previews/local disabled. If protection ceases to be verified, also restore ABUSE_CONTROLS_VERIFIED=false. Never expose the secret or alter unrelated projects. Waiting deadlines cannot cancel computation already admitted by the provider.
 

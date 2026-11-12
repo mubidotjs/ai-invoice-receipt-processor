@@ -4,6 +4,8 @@ Investigated 2026-11-12 from main 4fecc9035f537729e367666c5b5e72d7a101921c and t
 
 **No inference, production Turnstile challenge, historical retry slot, DNS/credential/limiter change or paid service was used in this task.** Preview/Production frontend flags and Worker health were independently read back as disabled. This correction is not a completed Gate E2 acceptance.
 
+A subsequent separately authorized [final bounded production run](DEPLOYMENT.md) stopped on Harbor AI_UNAVAILABLE at invocation, before output validation. Both live flags were restored false; Saffron was not attempted. The historical diagnosis below is preserved; it does not explain this new provider-stage failure.
+
 ## Pipeline and historical certainty
 
 | Stage                                              | Harbor invoice                                                              | Saffron receipt                                                                                    |
