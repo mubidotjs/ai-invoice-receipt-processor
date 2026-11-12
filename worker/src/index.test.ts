@@ -136,6 +136,37 @@ describe('Worker admission and disabled defaults', () => {
   });
 });
 describe('mocked protection and model boundary', () => {
+  it('temporary protection-only probe verifies the real adapter with inference impossible', async () => {
+    const s = setup();
+    s.env.LIVE_AI_ENABLED = 'false';
+    s.env.ABUSE_CONTROLS_VERIFIED = 'false';
+    const res = await handler.fetch(
+      request(payload(), { 'X-Ledger-Protection-Check': '1' }),
+      s.env,
+    );
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({
+      status: 'protection-verified',
+      hostname: 'localhost.example',
+      action: 'invoice-extract',
+      inference: false,
+    });
+    expect(s.visitor).toHaveBeenCalled();
+    expect(s.aggregate).toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(s.run).not.toHaveBeenCalled();
+  });
+  it('temporary probe fails closed on verification rejection and cannot run in live mode', async () => {
+    const s = setup();
+    const probe = () => request(payload(), { 'X-Ledger-Protection-Check': '1' });
+    expect((await handler.fetch(probe(), s.env)).status).toBe(503);
+    expect(fetch).not.toHaveBeenCalled();
+    s.env.LIVE_AI_ENABLED = 'false';
+    s.env.ABUSE_CONTROLS_VERIFIED = 'false';
+    vi.mocked(fetch).mockResolvedValue(new Response(JSON.stringify({ success: false })));
+    expect((await handler.fetch(probe(), s.env)).status).toBe(403);
+    expect(s.run).not.toHaveBeenCalled();
+  });
   it('returns a validated draft using one mocked model call', async () => {
     const s = setup();
     const res = await handler.fetch(request(), s.env);
