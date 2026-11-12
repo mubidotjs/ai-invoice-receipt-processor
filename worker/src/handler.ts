@@ -113,6 +113,7 @@ const verifySchema = z.object({
   hostname: z.string().optional(),
   action: z.string().optional(),
   challenge_ts: z.iso.datetime().optional(),
+  'error-codes': z.array(z.string().max(80)).max(10).optional(),
 });
 async function verifyTurnstile(
   token: string,
@@ -128,15 +129,30 @@ async function verifyTurnstile(
       body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
       signal: controller.signal,
     });
-    if (!res.ok)
+    const verified = verifySchema.safeParse(JSON.parse(await readBounded(res, 8192)));
+    if (!verified.success)
       throw new ApiError(
         'PROTECTION_UNAVAILABLE',
         'Bot verification is unavailable. Local processing remains available.',
         503,
       );
-    const verified = verifySchema.safeParse(JSON.parse(await readBounded(res, 8192)));
+    const codes = verified.data['error-codes'] ?? [];
+    if (codes.some((code) => ['invalid-input-secret', 'missing-input-secret'].includes(code)))
+      throw new ApiError(
+        'PROTECTION_UNAVAILABLE',
+        'Bot verification configuration was rejected. Local processing remains available.',
+        503,
+      );
+    const rejectedToken = codes.some((code) =>
+      ['invalid-input-response', 'missing-input-response', 'timeout-or-duplicate'].includes(code),
+    );
+    if ((!res.ok && !(res.status === 400 && rejectedToken)) || codes.includes('internal-error'))
+      throw new ApiError(
+        'PROTECTION_UNAVAILABLE',
+        'Bot verification is unavailable. Local processing remains available.',
+        503,
+      );
     if (
-      !verified.success ||
       !verified.data.success ||
       !split(env.TURNSTILE_HOSTNAMES).includes(verified.data.hostname ?? '') ||
       verified.data.action !== 'invoice-extract'
