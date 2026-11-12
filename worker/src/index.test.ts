@@ -251,6 +251,44 @@ describe('mocked protection and model boundary', () => {
     expect(args[0]).toBe('https://challenges.cloudflare.com/turnstile/v0/siteverify');
     expect(args[1]?.body).not.toContain('ACME');
   });
+  it.each(['invalid-input-response', 'missing-input-response', 'timeout-or-duplicate'])(
+    'rejects a real HTTP 400 Siteverify token failure %s without inference',
+    async (code) => {
+      const s = setup();
+      vi.mocked(fetch).mockResolvedValue(
+        new Response(JSON.stringify({ success: false, 'error-codes': [code] }), { status: 400 }),
+      );
+      const res = await handler.fetch(request(), s.env);
+      expect(res.status).toBe(403);
+      expect(await res.json()).toMatchObject({ error: { code: 'TURNSTILE_REJECTED' } });
+      expect(s.run).not.toHaveBeenCalled();
+    },
+  );
+  it('reports rejected server configuration without exposing credentials', async () => {
+    const s = setup();
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ success: false, 'error-codes': ['invalid-input-secret'] }), {
+        status: 400,
+      }),
+    );
+    const res = await handler.fetch(request(), s.env);
+    expect(res.status).toBe(503);
+    const text = await res.text();
+    expect(text).toContain('configuration was rejected');
+    expect(text).not.toContain(s.env.TURNSTILE_SECRET);
+    expect(s.run).not.toHaveBeenCalled();
+  });
+  it('never accepts successful-looking verification data from a failed service response', async () => {
+    const s = setup();
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({ success: true, hostname: 'localhost.example', action: 'invoice-extract' }),
+        { status: 503 },
+      ),
+    );
+    expect((await handler.fetch(request(), s.env)).status).toBe(503);
+    expect(s.run).not.toHaveBeenCalled();
+  });
   it.each([
     { choices: [{ finish_reason: 'length', message: { content: '{}' } }] },
     { response: '```json\n{}\n```' },
