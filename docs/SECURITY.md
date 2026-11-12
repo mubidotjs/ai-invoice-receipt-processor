@@ -26,7 +26,7 @@ Native throttles are 2 visitor attempts and 5 project attempts per 60s. Counters
 
 Production rejects known Turnstile test-key patterns. Local test widget/secret strings exist only in test files; they do not create a real verification integration or enable the default application. Production secrets are absent from tracked files and frontend configuration. The separately authorized E1 CLI login keeps OAuth state in ignored, workspace-scoped tooling configuration; the Turnstile secret exists only as an encrypted Worker secret. Never publish those ignored files.
 
-Rejection diagnostics contain only fixed stage/issue categories and allowlisted schema paths. No Zod issue messages, arbitrary keys, provider error objects, document text, field values, tokens or response bodies are logged. Persistent observability remains disabled. See the [offline diagnosis](AI-OUTPUT-DIAGNOSIS.md).
+Rejection diagnostics contain only fixed stage/issue categories and allowlisted schema paths. Invocation diagnostics additionally retain only explicitly allowlisted provider codes/error names and fixed code-source/reason labels; unknown values are omitted. No Zod issue messages, arbitrary keys, provider error objects, document text, field values, tokens or response bodies are logged. Persistent observability remains disabled. See the [offline diagnosis](AI-OUTPUT-DIAGNOSIS.md).
 
 ## Cost controls
 

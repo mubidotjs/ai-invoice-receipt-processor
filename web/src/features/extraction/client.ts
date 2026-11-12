@@ -151,6 +151,12 @@ export async function extract(pages: TextPage[], token: string, signal: AbortSig
           'Cloudflare model capacity is unavailable. Continue manually or retry explicitly later.',
         AI_MODEL_UNAVAILABLE:
           'The selected model is unavailable. No alternative model or paid fallback was selected.',
+        AI_REQUEST_REJECTED:
+          'Cloudflare rejected the account request. Continue manually while service access is reviewed.',
+        AI_INVALID_PARAMETERS:
+          'Cloudflare rejected the model request parameters. No draft was applied; continue manually.',
+        AI_JSON_GENERATION_FAILED:
+          'The provider could not generate the requested structured JSON. No draft was applied; continue manually.',
         AI_UNAVAILABLE: 'The model request failed. No AI draft was applied; continue manually.',
         PROTECTION_UNAVAILABLE:
           'Cloudflare bot verification is unavailable. Local processing remains available.',

@@ -1,5 +1,7 @@
 # Gate E2 offline diagnosis
 
+Latest offline follow-up: [provider invocation diagnostics and reference-project comparison](PROVIDER-INVOCATION-DIAGNOSIS.md). This release keeps AI disabled, adds safe code/name classification and complete input byte checks, and makes no real inference call. Historical attempts below are retained.
+
 Investigated 2026-11-12 from main 4fecc9035f537729e367666c5b5e72d7a101921c and the recorded attempts in [gate-e2.json](evidence/gate-e2.json). Safe deployed Worker c8b89a14-9973-4820-92d4-273459c12343 was read back through version metadata: LIVE_AI_ENABLED=false, ABUSE_CONTROLS_VERIFIED=true, unchanged exact origins/hostnames, native AI, visitor 12001 (2/60s), aggregate 12002 (5/60s), encrypted secret present. Its script ETag is recorded in the [offline report](evidence/gate-e2-offline-diagnosis.json). Repository source and immutable historical commits were inspected; historical model bodies were not retained or recovered.
 
 **No inference, production Turnstile challenge, historical retry slot, DNS/credential/limiter change or paid service was used in this task.** Preview/Production frontend flags and Worker health were independently read back as disabled. This correction is not a completed Gate E2 acceptance.

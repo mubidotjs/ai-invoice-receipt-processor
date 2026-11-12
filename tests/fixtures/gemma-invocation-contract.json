@@ -1,0 +1,127 @@
+{
+  "source": "https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/workers-ai-models/gemma-4-26b-a4b-it.json",
+  "model": "@cf/google/gemma-4-26b-a4b-it",
+  "properties": {
+    "max_completion_tokens": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 1
+    },
+    "stream": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": false
+    },
+    "store": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": false
+    },
+    "chat_template_kwargs": {
+      "type": "object",
+      "properties": {
+        "enable_thinking": {
+          "type": "boolean",
+          "default": true
+        },
+        "clear_thinking": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "response_format": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["text"]
+                }
+              },
+              "required": ["type"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["json_object"]
+                }
+              },
+              "required": ["type"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["json_schema"]
+                },
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "schema": {
+                      "type": "object"
+                    },
+                    "strict": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["name"]
+                }
+              },
+              "required": ["type", "json_schema"]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
