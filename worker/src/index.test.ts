@@ -136,37 +136,6 @@ describe('Worker admission and disabled defaults', () => {
   });
 });
 describe('mocked protection and model boundary', () => {
-  it('temporary protection-only probe verifies the real adapter with inference impossible', async () => {
-    const s = setup();
-    s.env.LIVE_AI_ENABLED = 'false';
-    s.env.ABUSE_CONTROLS_VERIFIED = 'false';
-    const res = await handler.fetch(
-      request(payload(), { 'X-Ledger-Protection-Check': '1' }),
-      s.env,
-    );
-    expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({
-      status: 'protection-verified',
-      hostname: 'localhost.example',
-      action: 'invoice-extract',
-      inference: false,
-    });
-    expect(s.visitor).toHaveBeenCalled();
-    expect(s.aggregate).toHaveBeenCalled();
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(s.run).not.toHaveBeenCalled();
-  });
-  it('temporary probe fails closed on verification rejection and cannot run in live mode', async () => {
-    const s = setup();
-    const probe = () => request(payload(), { 'X-Ledger-Protection-Check': '1' });
-    expect((await handler.fetch(probe(), s.env)).status).toBe(503);
-    expect(fetch).not.toHaveBeenCalled();
-    s.env.LIVE_AI_ENABLED = 'false';
-    s.env.ABUSE_CONTROLS_VERIFIED = 'false';
-    vi.mocked(fetch).mockResolvedValue(new Response(JSON.stringify({ success: false })));
-    expect((await handler.fetch(probe(), s.env)).status).toBe(403);
-    expect(s.run).not.toHaveBeenCalled();
-  });
   it('returns a validated draft using one mocked model call', async () => {
     const s = setup();
     const res = await handler.fetch(request(), s.env);
@@ -249,8 +218,23 @@ describe('mocked protection and model boundary', () => {
     expect(s.run).not.toHaveBeenCalled();
     const args = vi.mocked(fetch).mock.calls[0]!;
     expect(args[0]).toBe('https://challenges.cloudflare.com/turnstile/v0/siteverify');
+    expect(args[1]?.redirect).toBe('manual');
     expect(args[1]?.body).not.toContain('ACME');
   });
+  it.each([301, 302, 303, 307, 308])(
+    'refuses Siteverify redirect HTTP %s without forwarding credentials',
+    async (status) => {
+      const s = setup();
+      vi.mocked(fetch).mockResolvedValue(
+        new Response('{}', { status, headers: { Location: 'https://unapproved.invalid' } }),
+      );
+      const res = await handler.fetch(request(), s.env);
+      expect(res.status).toBe(503);
+      expect(vi.mocked(fetch).mock.calls).toHaveLength(1);
+      expect(vi.mocked(fetch).mock.calls[0]![1]?.redirect).toBe('manual');
+      expect(s.run).not.toHaveBeenCalled();
+    },
+  );
   it.each(['invalid-input-response', 'missing-input-response', 'timeout-or-duplicate'])(
     'rejects a real HTTP 400 Siteverify token failure %s without inference',
     async (code) => {

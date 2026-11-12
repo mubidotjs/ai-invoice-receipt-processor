@@ -115,21 +115,21 @@ const verifySchema = z.object({
   challenge_ts: z.iso.datetime().optional(),
   'error-codes': z.array(z.string().max(80)).max(10).optional(),
 });
-async function verifyTurnstile(
-  token: string,
-  env: Env,
-): Promise<{ hostname: string; action: string }> {
+async function verifyTurnstile(token: string, env: Env): Promise<void> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      redirect: 'error',
+      redirect: 'manual',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
       signal: controller.signal,
     });
-    const verified = verifySchema.safeParse(JSON.parse(await readBounded(res, 8192)));
+    if (res.status >= 300 && res.status < 400)
+      throw new ApiError('PROTECTION_UNAVAILABLE', 'Bot verification redirects are refused.', 503);
+    const body = JSON.parse(await readBounded(res, 8192));
+    const verified = verifySchema.safeParse(body);
     if (!verified.success)
       throw new ApiError(
         'PROTECTION_UNAVAILABLE',
@@ -162,7 +162,6 @@ async function verifyTurnstile(
         'Bot verification failed or expired. Complete a fresh challenge.',
         403,
       );
-    return { hostname: verified.data.hostname!, action: verified.data.action! };
   } catch (error) {
     if (error instanceof ApiError) throw error;
     throw new ApiError(
@@ -256,7 +255,7 @@ export default {
           headers: {
             'Access-Control-Allow-Origin': origin,
             'Access-Control-Allow-Methods': 'POST',
-            'Access-Control-Allow-Headers': 'Content-Type, X-Ledger-Protection-Check',
+            'Access-Control-Allow-Headers': 'Content-Type',
             Vary: 'Origin',
             'Cache-Control': 'no-store',
           },
@@ -301,22 +300,6 @@ export default {
       } catch (e) {
         if (e instanceof ApiError) throw e;
         throw new ApiError('PROTECTION_UNAVAILABLE', 'Request protection is unavailable.', 503);
-      }
-      // Temporary authorized E2 probe: remove before activation. It cannot reach AI.
-      if (request.headers.get('X-Ledger-Protection-Check') === '1') {
-        if (
-          env.LIVE_AI_ENABLED !== 'false' ||
-          env.ABUSE_CONTROLS_VERIFIED !== 'false' ||
-          !configured(env) ||
-          !ip
-        )
-          throw new ApiError(
-            'PROTECTION_UNAVAILABLE',
-            'Disabled verification is not configured.',
-            503,
-          );
-        const verified = await verifyTurnstile(parsed.data.turnstileToken, env);
-        return json({ status: 'protection-verified', ...verified, inference: false }, 200, allowed);
       }
       if (env.LIVE_AI_ENABLED !== 'true')
         throw new ApiError(
