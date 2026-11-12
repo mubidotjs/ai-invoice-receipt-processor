@@ -1,6 +1,6 @@
 # AI Invoice & Receipt Processor
 
-**Ledger Lens** turns invoice/receipt documents into text locally, lets you review structured values, and exports corrected JSON or CSV. Optional cloud AI extraction is implemented behind consent and protection gates. **The branded production launch is in verification. Real Turnstile validation has passed; live model acceptance results will be recorded separately. Local development and previews remain disabled/mocked.**
+**Ledger Lens** turns invoice/receipt documents into text locally, lets you review structured values, and exports corrected JSON or CSV. **The branded public demonstration is verified; live AI is disabled after unsuccessful Gate E2 model acceptance.** Real production Turnstile validation passed, but neither of two bounded AI submissions produced an accepted draft. Manual processing, correction and exports remain available. Local development and previews remain disabled/mocked. See the [actual launch results and limitations](docs/DEPLOYMENT.md).
 
 [Open Ledger Lens](https://invoice.mubashirhussain.dev) · [Original Vercel URL](https://ai-invoice-receipt-processor.vercel.app) · [GitHub repository](https://github.com/mubidotjs/ai-invoice-receipt-processor) · [Worker health](https://ai-invoice-receipt-processor.mubikhan69.workers.dev/health)
 

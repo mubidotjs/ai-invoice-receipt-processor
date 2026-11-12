@@ -1,5 +1,7 @@
 # Security, privacy and cost boundaries
 
+Production status on 2026-11-12: **live AI disabled after unsuccessful bounded model acceptance**. Real server-side Turnstile hostname/action validation and replay/invalid-token rejection passed. The deployed Siteverify adapter uses Workers-supported `redirect:manual` and rejects redirects. Native throttling was observed; isolated aggregate/global enforcement is not claimed. See [actual deployment evidence and limitations](DEPLOYMENT.md). Local/CI protection and failure tests remain mocked.
+
 ## Data handling
 
 Uploaded files, previews, OCR and corrections remain in memory. No document localStorage/IndexedDB, database, history, analytics, session replay or service worker is used. Reset aborts work, destroys tasks/workers, revokes object URLs and releases document references; it cannot guarantee forensic erasure or retract a transmitted request. User-initiated downloads intentionally save the reviewed export.
