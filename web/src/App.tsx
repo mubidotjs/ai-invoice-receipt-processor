@@ -507,7 +507,7 @@ export default function App() {
               <div className="section-line">
                 <h3 id="ai-title">Optional AI extraction</h3>
                 <span className="pill neutral">
-                  {aiAvailable() ? 'CLOUD · OPT IN' : 'DISABLED LOCALLY'}
+                  {aiAvailable() ? 'CLOUD · OPT IN' : 'AI DISABLED'}
                 </span>
               </div>
               <p className="small">

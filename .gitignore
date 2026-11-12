@@ -2,6 +2,7 @@ node_modules/
 .npm-cache/
 .cache/
 **/dist/
+**/dist-production/
 **/.wrangler/
 **/.cache/
 web/public/assets/

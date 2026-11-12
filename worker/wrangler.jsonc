@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-11-11",
   "workers_dev": false,
+  "account_id": "29253e8d409d4b73b02cb4223693ca02",
   "vars": {
     "LIVE_AI_ENABLED": "false",
     "ABUSE_CONTROLS_VERIFIED": "false",
@@ -11,4 +12,33 @@
     "TURNSTILE_HOSTNAMES": "",
   },
   "observability": { "enabled": false },
+  "env": {
+    "production": {
+      "name": "ai-invoice-receipt-processor",
+      "workers_dev": true,
+      "vars": {
+        "LIVE_AI_ENABLED": "false",
+        "ABUSE_CONTROLS_VERIFIED": "false",
+        "ALLOWED_ORIGINS": "https://ai-invoice-receipt-processor.vercel.app",
+        "TURNSTILE_HOSTNAMES": "ai-invoice-receipt-processor.vercel.app",
+      },
+      "ai": { "binding": "AI" },
+      "unsafe": {
+        "bindings": [
+          {
+            "name": "VISITOR_LIMITER",
+            "type": "ratelimit",
+            "namespace_id": "12001",
+            "simple": { "limit": 2, "period": 60 },
+          },
+          {
+            "name": "AGGREGATE_LIMITER",
+            "type": "ratelimit",
+            "namespace_id": "12002",
+            "simple": { "limit": 5, "period": 60 },
+          },
+        ],
+      },
+    },
+  },
 }
