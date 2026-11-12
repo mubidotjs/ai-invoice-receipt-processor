@@ -101,7 +101,7 @@ try {
         .toBe(true);
     }
     await expect(page.locator('#source-text')).toHaveValue(
-      new RegExp(fixture.total.replace('.', '\\.')),
+      new RegExp(fixture.total.replace('.', '[.]')),
     );
     await expect(page.getByRole('button', { name: 'Extract with AI' })).toBeDisabled();
     await expect(page.getByLabel('Vendor name')).toHaveValue('');

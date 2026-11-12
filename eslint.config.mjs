@@ -6,6 +6,7 @@ export default ts.config(
   {
     ignores: [
       '**/dist/**',
+      '**/dist-production/**',
       '**/node_modules/**',
       '**/.cache/**',
       '**/.wrangler/**',

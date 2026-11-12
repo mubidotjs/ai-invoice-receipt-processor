@@ -1,6 +1,6 @@
-# Local evaluation and gate evidence
+# Evaluation and gate evidence
 
-Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. This report covers local Gates A–D only. **Gate E is unperformed: no remote repository, deployment, real inference or real Turnstile verification is claimed.**
+Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D were freshly reverified, followed by separately authorized **Gate E1 publication and disabled deployment**. No real inference or real Turnstile verification is claimed; E2 remains unauthorized.
 
 ## Observed checks
 
@@ -18,7 +18,22 @@ Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1*
 | Local workerd health      | HTTP 200, `liveEnabled:false`  | Actual local runtime only, no upstream call                                                                                |
 | Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`   | Synthetic text only; no Siteverify or inference                                                                            |
 
-The final `npm run check` exited successfully. Local preview/test servers were started separately and `PLAYWRIGHT_EXTERNAL_SERVER=1` was set because npm-managed Windows test-server teardown had lingered in an earlier run. This changes server lifecycle only: the complete test suite and production frontend build were used. CI uses the configured managed servers on Ubuntu; hosted GitHub Actions has **not** been run because publication is unauthorized.
+The fresh E1 `npm ci` and `npm run check` exited successfully: 102 Vitest and 18 browser tests (55.9s), types, lint and both builds. The first installation hit an owned preview process holding a native module; stopping that preview and rerunning `npm ci` resolved it. The fresh suite used its managed servers. Earlier A–D Windows verification had used separately started servers because teardown had lingered. [Hosted CI run 43160690098](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43160690098) also passed using Ubuntu managed servers, without cloud credentials/inference.
+
+## Public E1 observations
+
+Application/config commit `140802619c36c96c6fd027cbca63c46bc5870153` deployed READY as `dpl_xRnWVdHvAgsdBWNNmGa6jJQCpm3P`. Vercel build logs explicitly reported Node **24.22.3** and npm **11.19.1**. [Deployment identities and rollback](DEPLOYMENT.md) and the [machine-readable synthetic-only report](evidence/gate-e1.json) preserve the actual observations.
+
+- The HTTPS canonical application returned 200 with restrictive CSP, `nosniff`, and `no-referrer` headers.
+- All **228** deployed OCR/PDF assets (**52,994,366 bytes**) matched their manifest SHA-256 and size and loaded from the application origin.
+- All six documents in the table below passed actual hosted native/OCR processing, previews/page navigation, manual correction, schema/review/acknowledgment gates, JSON and CSV byte checks. Fresh contexts blocked external and non-GET requests; no unexpected request or page error occurred. Actual extraction left review fields blank until manual entry.
+- Harbor's corrected total changed its arithmetic diagnostic from warning to pass. Invalid totals blocked exports and later edits reset confirmation. Downloads retained synthetic status and manual provenance.
+- At **390/768/1280px**, the deployed deterministic sample view had no page overflow, a working keyboard skip link and zero serious/critical axe findings. This is bounded automated coverage, not a complete assistive-technology audit.
+- Worker `/health` returned 200 with `liveEnabled:false`; allowed-origin preflight returned 204, foreign origin 403, unknown document-body fields 400. Three synthetic valid requests returned 503 `LIVE_AI_DISABLED`, followed by 429 `RATE_LIMITED` with `Retry-After`. Approximate native throttling was observed; aggregate exhaustion/distributed protection were not proven.
+- Independent native bindings and false flags were read back from Cloudflare. The separate Managed Turnstile widget has the exact canonical hostname, no pre-clearance and an encrypted Worker secret. Real widget tokens/Siteverify were not exercised. Test-key rejection, missing/failing protection and provider failures remain mocked tests.
+- Vercel **Hobby** and Workers **Free** were confirmed without changing billing. No live AI, AI Gateway, paid fallback, DNS or other project configuration was enabled or modified.
+
+The production screenshot shows an explicitly labeled deterministic sample. It is separate from the six real-processing tests and cannot demonstrate inference. The public verifier is `scripts/verify-production.mjs`; generated working artifacts remain ignored, while the committed report contains only public metadata and synthetic test findings.
 
 ## Externally blocked actual processing
 
@@ -60,12 +75,13 @@ Separate browser tests prove a native page can be explicitly OCRed, 90-degree ro
 
 ## Gate status
 
-| Gate                                | Status                                   | Evidence                                                                                                                           |
-| ----------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| A — Contracts/foundation            | Complete locally                         | Independent workspaces, strict schemas, exact arithmetic, six authored fixtures, disabled defaults and reproducible lockfile       |
-| B — Local processing                | Complete locally                         | Actual native/scanned/mixed processing and complete externally blocked correction/export flow                                      |
-| C — AI/review/export                | Complete locally with mocks              | Consent, evidence/manual provenance, protected handler, failure behavior and export bytes                                          |
-| D — Release readiness               | Complete locally                         | Full checks, dependency review, responsive/accessibility checks, architecture/privacy/evaluation and launch/rollback documentation |
-| E — Public launch/live verification | **Not performed; separately authorized** | No remote resources or real inference; exact model behavior, Free eligibility and production protection must be reverified         |
+| Gate                                    | Status                      | Evidence                                                                                                                                                           |
+| --------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A — Contracts/foundation                | Complete locally            | Independent workspaces, strict schemas, exact arithmetic, six authored fixtures, disabled defaults and reproducible lockfile                                       |
+| B — Local processing                    | Complete locally            | Actual native/scanned/mixed processing and complete externally blocked correction/export flow                                                                      |
+| C — AI/review/export                    | Complete locally with mocks | Consent, evidence/manual provenance, protected handler, failure behavior and export bytes                                                                          |
+| D — Release readiness                   | Complete locally            | Full checks, dependency review, responsive/accessibility checks, architecture/privacy/evaluation and launch/rollback documentation                                 |
+| E1 — Disabled public launch             | Complete                    | Published source/hosted CI; Vercel Hobby, disabled Workers Free service and separate Turnstile; six public processing/export workflows and bundled assets verified |
+| E2 — Real protection/model verification | Not authorized or performed | Exact model eligibility/license/output behavior, shared quota, real Siteverify and explicitly bounded inference still require owner authorization                  |
 
 No model field-accuracy score, general hallucination rate, production availability, shared-quota reservation or distributed abuse-resistance claim is made. Source text and mechanical evidence checks do not establish authenticity or semantic truth. Every financial value remains subject to human verification.

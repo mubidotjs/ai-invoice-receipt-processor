@@ -5,6 +5,7 @@ node_modules/
 **/.cache/
 **/.wrangler/
 **/dist/
+**/dist-production/
 web/public/
 test-results/
 playwright-report/

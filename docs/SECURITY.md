@@ -22,7 +22,7 @@ Live inference needs `LIVE_AI_ENABLED=true`, `ABUSE_CONTROLS_VERIFIED=true`, nat
 
 Native throttles are 2 visitor attempts and 5 project attempts per 60s. Counters are approximate and location-local; neither a project key nor browser counter is a strict worldwide/daily budget. Siteverify is mandatory and must match the production hostname and `invoice-extract` action. Tokens are per-attempt and never reused automatically.
 
-Production rejects known Turnstile test-key patterns. Local test widget/secret strings exist only in test files; they do not create a real verification integration or enable the default application. There are no production credentials in this checkout.
+Production rejects known Turnstile test-key patterns. Local test widget/secret strings exist only in test files; they do not create a real verification integration or enable the default application. Production secrets are absent from tracked files and frontend configuration. The separately authorized E1 CLI login keeps OAuth state in ignored, workspace-scoped tooling configuration; the Turnstile secret exists only as an encrypted Worker secret. Never publish those ignored files.
 
 ## Cost controls
 
