@@ -1,0 +1,14 @@
+node_modules/
+**/node_modules/
+.npm-cache/
+.cache/
+**/.cache/
+**/.wrangler/
+**/dist/
+web/public/
+test-results/
+playwright-report/
+coverage/
+tmp/
+fixtures/licenses/
+package-lock.json

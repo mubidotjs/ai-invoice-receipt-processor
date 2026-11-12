@@ -1,0 +1,14 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ai-invoice-receipt-processor",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-11",
+  "workers_dev": false,
+  "vars": {
+    "LIVE_AI_ENABLED": "false",
+    "ABUSE_CONTROLS_VERIFIED": "false",
+    "ALLOWED_ORIGINS": "http://127.0.0.1:5401",
+    "TURNSTILE_HOSTNAMES": "",
+  },
+  "observability": { "enabled": false },
+}

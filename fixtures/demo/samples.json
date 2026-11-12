@@ -1,0 +1,288 @@
+[
+  {
+    "id": "harbor",
+    "title": "Harbor Studio · USD invoice",
+    "description": "Digital PDF · fractional quantity · exclusive tax",
+    "file": "harbor.pdf",
+    "mime": "application/pdf",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nHARBOR STUDIO\nINVOICE HBR-1042\nIssue date: 2026-10-28\nDue date: 2026-11-27\nCurrency: USD\nTax treatment: exclusive\n\nDescription / Quantity / Unit price / Line total\nDesign consultation    1.5    80.00    120.00\nProject materials      1     30.00     30.00\nLine discounts: 0.00\n\nSubtotal: 150.00\nSales tax 10%: 15.00\nTax total: 15.00\nDocument discount: 0.00\nShipping: 0.00\nTip: 0.00\nTOTAL USD 165.00",
+        "preview": "harbor-p1.png"
+      }
+    ],
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "HARBOR STUDIO",
+      "invoiceNumber": "HBR-1042",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": "2026-11-27",
+      "currency": "USD",
+      "lineItems": [
+        {
+          "description": "Design consultation",
+          "quantity": "1.5",
+          "unitPrice": "80.00",
+          "discountAmount": "0.00",
+          "lineTotal": "120.00"
+        },
+        {
+          "description": "Project materials",
+          "quantity": "1",
+          "unitPrice": "30.00",
+          "discountAmount": "0.00",
+          "lineTotal": "30.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "Sales tax",
+          "ratePercent": "10",
+          "amount": "15.00"
+        }
+      ],
+      "subtotal": "150.00",
+      "taxTotal": "15.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "165.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    }
+  },
+  {
+    "id": "saffron",
+    "title": "Saffron Cafe · PKR receipt",
+    "description": "PNG image · actual browser OCR",
+    "file": "saffron.png",
+    "mime": "image/png",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nSAFFRON CAFE\nRECEIPT SC-0088\nIssue date: 2026-10-28\nCurrency: PKR\nTax treatment: exclusive\n\nDescription / Quantity / Unit price / Line total\nMasala chai     2    250.00    500.00\nFresh bun       1    180.00    180.00\nLine discounts: 0.00\n\nSubtotal: 680.00\nTax total: 0.00\nDocument discount: 0.00\nShipping: 0.00\nTip: 0.00\nTOTAL PKR 680.00",
+        "preview": "saffron-p1.png"
+      }
+    ],
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "SAFFRON CAFE",
+      "invoiceNumber": null,
+      "receiptNumber": "SC-0088",
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "PKR",
+      "lineItems": [
+        {
+          "description": "Masala chai",
+          "quantity": "2",
+          "unitPrice": "250.00",
+          "discountAmount": "0.00",
+          "lineTotal": "500.00"
+        },
+        {
+          "description": "Fresh bun",
+          "quantity": "1",
+          "unitPrice": "180.00",
+          "discountAmount": "0.00",
+          "lineTotal": "180.00"
+        }
+      ],
+      "taxes": [],
+      "subtotal": "680.00",
+      "taxTotal": "0.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "680.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    }
+  },
+  {
+    "id": "northstar",
+    "title": "Northstar Supply · GBP scanned PDF",
+    "description": "Two scanned pages · OCR on both pages",
+    "file": "northstar.pdf",
+    "mime": "application/pdf",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nNORTHSTAR SUPPLY\nINVOICE NS-208\nIssue date: 2026-10-28\nCurrency: GBP\nTax treatment: exclusive\n\nDescription / Quantity / Unit price / Line total\nArchive folders     2    8.50    17.00\nLine discounts: 0.00\n\nContinued on page 2",
+        "preview": "northstar-p1.png"
+      },
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nNORTHSTAR SUPPLY\nINVOICE NS-208 - TOTALS\nCurrency: GBP\n\nSubtotal: 17.00\nVAT 20%: 3.40\nTax total: 3.40\nDocument discount: 0.00\nShipping: 0.00\nTip: 0.00\nTOTAL GBP 20.40",
+        "preview": "northstar-p2.png"
+      }
+    ],
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "NORTHSTAR SUPPLY",
+      "invoiceNumber": "NS-208",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "GBP",
+      "lineItems": [
+        {
+          "description": "Archive folders",
+          "quantity": "2",
+          "unitPrice": "8.50",
+          "discountAmount": "0.00",
+          "lineTotal": "17.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "VAT",
+          "ratePercent": "20",
+          "amount": "3.40"
+        }
+      ],
+      "subtotal": "17.00",
+      "taxTotal": "3.40",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "20.40",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    }
+  },
+  {
+    "id": "alder",
+    "title": "Alder Workshop · EUR mixed PDF",
+    "description": "Native first page + scanned totals page",
+    "file": "alder.pdf",
+    "mime": "application/pdf",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nALDER WORKSHOP\nINVOICE AW-305\nIssue date: 2026-10-28\nCurrency: EUR\nTax treatment: exclusive\n\nDescription / Quantity / Unit price / Line total\nWorkshop session     1    85.00    85.00\nLine discounts: 0.00\n\nTotals on the next page",
+        "preview": "alder-p1.png"
+      },
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nALDER WORKSHOP\nINVOICE AW-305 - TOTALS\nCurrency: EUR\n\nSubtotal: 85.00\nVAT 20%: 17.00\nTax total: 17.00\nDocument discount: 0.00\nShipping: 0.00\nTip: 0.00\nTOTAL EUR 102.00",
+        "preview": "alder-p2.png"
+      }
+    ],
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "ALDER WORKSHOP",
+      "invoiceNumber": "AW-305",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "EUR",
+      "lineItems": [
+        {
+          "description": "Workshop session",
+          "quantity": "1",
+          "unitPrice": "85.00",
+          "discountAmount": "0.00",
+          "lineTotal": "85.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "VAT",
+          "ratePercent": "20",
+          "amount": "17.00"
+        }
+      ],
+      "subtotal": "85.00",
+      "taxTotal": "17.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "102.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    }
+  },
+  {
+    "id": "juniper",
+    "title": "Juniper Kitchen · USD receipt",
+    "description": "JPEG image · inclusive tax · intentional total mismatch",
+    "file": "juniper.jpg",
+    "mime": "image/jpeg",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nJUNIPER KITCHEN\nRECEIPT JK-0042\nIssue date: 2026-10-28\nCurrency: USD\nTax treatment: inclusive\n\nDescription / Quantity / Unit price / Line total\nLunch set     1    32.40    32.40\nLine discounts: 0.00\n\nSubtotal (tax included): 32.40\nIncluded tax: 2.40\nTax total: 2.40\nDocument discount: 0.00\nShipping: 0.00\nTip: 4.00\nTOTAL USD 37.40\n\nTraining example: totals require verification",
+        "preview": "juniper-p1.png"
+      }
+    ],
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "JUNIPER KITCHEN",
+      "invoiceNumber": null,
+      "receiptNumber": "JK-0042",
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "USD",
+      "lineItems": [
+        {
+          "description": "Lunch set",
+          "quantity": "1",
+          "unitPrice": "32.40",
+          "discountAmount": "0.00",
+          "lineTotal": "32.40"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "Included tax",
+          "ratePercent": null,
+          "amount": "2.40"
+        }
+      ],
+      "subtotal": "32.40",
+      "taxTotal": "2.40",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "4.00",
+      "total": "37.40",
+      "taxMode": "inclusive",
+      "lineItemsComplete": true
+    }
+  },
+  {
+    "id": "cedar",
+    "title": "Cedar Market · incomplete receipt",
+    "description": "PNG image · ambiguous date and missing currency",
+    "file": "cedar.png",
+    "mime": "image/png",
+    "pages": [
+      {
+        "text": "SYNTHETIC DOCUMENT / NOT A REAL TRANSACTION\nCEDAR MARKET\nRECEIPT CM-0015\nDate: 01/02/2026\nCurrency: not stated\n\nDescription / Quantity / Unit price / Line total\nNotebook     2    20.00    40.00\n\nSubtotal: 40.00\nTOTAL 40.00\n\nTraining example: confirm date and currency",
+        "preview": "cedar-p1.png"
+      }
+    ],
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "CEDAR MARKET",
+      "invoiceNumber": null,
+      "receiptNumber": "CM-0015",
+      "issueDate": null,
+      "dueDate": null,
+      "currency": null,
+      "lineItems": [
+        {
+          "description": "Notebook",
+          "quantity": "2",
+          "unitPrice": "20.00",
+          "discountAmount": null,
+          "lineTotal": "40.00"
+        }
+      ],
+      "taxes": [],
+      "subtotal": "40.00",
+      "taxTotal": null,
+      "discountTotal": null,
+      "shipping": null,
+      "tip": null,
+      "total": "40.00",
+      "taxMode": "unknown",
+      "lineItemsComplete": true
+    }
+  }
+]

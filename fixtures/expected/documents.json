@@ -1,0 +1,359 @@
+[
+  {
+    "id": "harbor",
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "HARBOR STUDIO",
+      "invoiceNumber": "HBR-1042",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": "2026-11-27",
+      "currency": "USD",
+      "lineItems": [
+        {
+          "description": "Design consultation",
+          "quantity": "1.5",
+          "unitPrice": "80.00",
+          "discountAmount": "0.00",
+          "lineTotal": "120.00"
+        },
+        {
+          "description": "Project materials",
+          "quantity": "1",
+          "unitPrice": "30.00",
+          "discountAmount": "0.00",
+          "lineTotal": "30.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "Sales tax",
+          "ratePercent": "10",
+          "amount": "15.00"
+        }
+      ],
+      "subtotal": "150.00",
+      "taxTotal": "15.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "165.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "HARBOR STUDIO",
+        "INVOICE HBR-1042",
+        "Issue date: 2026-10-28",
+        "Due date: 2026-11-27",
+        "Currency: USD",
+        "Tax treatment: exclusive",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Design consultation    1.5    80.00    120.00",
+        "Project materials      1     30.00     30.00",
+        "Line discounts: 0.00",
+        "",
+        "Subtotal: 150.00",
+        "Sales tax 10%: 15.00",
+        "Tax total: 15.00",
+        "Document discount: 0.00",
+        "Shipping: 0.00",
+        "Tip: 0.00",
+        "TOTAL USD 165.00"
+      ]
+    ]
+  },
+  {
+    "id": "saffron",
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "SAFFRON CAFE",
+      "invoiceNumber": null,
+      "receiptNumber": "SC-0088",
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "PKR",
+      "lineItems": [
+        {
+          "description": "Masala chai",
+          "quantity": "2",
+          "unitPrice": "250.00",
+          "discountAmount": "0.00",
+          "lineTotal": "500.00"
+        },
+        {
+          "description": "Fresh bun",
+          "quantity": "1",
+          "unitPrice": "180.00",
+          "discountAmount": "0.00",
+          "lineTotal": "180.00"
+        }
+      ],
+      "taxes": [],
+      "subtotal": "680.00",
+      "taxTotal": "0.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "680.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "SAFFRON CAFE",
+        "RECEIPT SC-0088",
+        "Issue date: 2026-10-28",
+        "Currency: PKR",
+        "Tax treatment: exclusive",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Masala chai     2    250.00    500.00",
+        "Fresh bun       1    180.00    180.00",
+        "Line discounts: 0.00",
+        "",
+        "Subtotal: 680.00",
+        "Tax total: 0.00",
+        "Document discount: 0.00",
+        "Shipping: 0.00",
+        "Tip: 0.00",
+        "TOTAL PKR 680.00"
+      ]
+    ]
+  },
+  {
+    "id": "northstar",
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "NORTHSTAR SUPPLY",
+      "invoiceNumber": "NS-208",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "GBP",
+      "lineItems": [
+        {
+          "description": "Archive folders",
+          "quantity": "2",
+          "unitPrice": "8.50",
+          "discountAmount": "0.00",
+          "lineTotal": "17.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "VAT",
+          "ratePercent": "20",
+          "amount": "3.40"
+        }
+      ],
+      "subtotal": "17.00",
+      "taxTotal": "3.40",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "20.40",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "NORTHSTAR SUPPLY",
+        "INVOICE NS-208",
+        "Issue date: 2026-10-28",
+        "Currency: GBP",
+        "Tax treatment: exclusive",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Archive folders     2    8.50    17.00",
+        "Line discounts: 0.00",
+        "",
+        "Continued on page 2"
+      ],
+      [
+        "NORTHSTAR SUPPLY",
+        "INVOICE NS-208 - TOTALS",
+        "Currency: GBP",
+        "",
+        "Subtotal: 17.00",
+        "VAT 20%: 3.40",
+        "Tax total: 3.40",
+        "Document discount: 0.00",
+        "Shipping: 0.00",
+        "Tip: 0.00",
+        "TOTAL GBP 20.40"
+      ]
+    ]
+  },
+  {
+    "id": "alder",
+    "data": {
+      "documentType": "invoice",
+      "vendorName": "ALDER WORKSHOP",
+      "invoiceNumber": "AW-305",
+      "receiptNumber": null,
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "EUR",
+      "lineItems": [
+        {
+          "description": "Workshop session",
+          "quantity": "1",
+          "unitPrice": "85.00",
+          "discountAmount": "0.00",
+          "lineTotal": "85.00"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "VAT",
+          "ratePercent": "20",
+          "amount": "17.00"
+        }
+      ],
+      "subtotal": "85.00",
+      "taxTotal": "17.00",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "0.00",
+      "total": "102.00",
+      "taxMode": "exclusive",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "ALDER WORKSHOP",
+        "INVOICE AW-305",
+        "Issue date: 2026-10-28",
+        "Currency: EUR",
+        "Tax treatment: exclusive",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Workshop session     1    85.00    85.00",
+        "Line discounts: 0.00",
+        "",
+        "Totals on the next page"
+      ],
+      [
+        "ALDER WORKSHOP",
+        "INVOICE AW-305 - TOTALS",
+        "Currency: EUR",
+        "",
+        "Subtotal: 85.00",
+        "VAT 20%: 17.00",
+        "Tax total: 17.00",
+        "Document discount: 0.00",
+        "Shipping: 0.00",
+        "Tip: 0.00",
+        "TOTAL EUR 102.00"
+      ]
+    ]
+  },
+  {
+    "id": "juniper",
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "JUNIPER KITCHEN",
+      "invoiceNumber": null,
+      "receiptNumber": "JK-0042",
+      "issueDate": "2026-10-28",
+      "dueDate": null,
+      "currency": "USD",
+      "lineItems": [
+        {
+          "description": "Lunch set",
+          "quantity": "1",
+          "unitPrice": "32.40",
+          "discountAmount": "0.00",
+          "lineTotal": "32.40"
+        }
+      ],
+      "taxes": [
+        {
+          "label": "Included tax",
+          "ratePercent": null,
+          "amount": "2.40"
+        }
+      ],
+      "subtotal": "32.40",
+      "taxTotal": "2.40",
+      "discountTotal": "0.00",
+      "shipping": "0.00",
+      "tip": "4.00",
+      "total": "37.40",
+      "taxMode": "inclusive",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "JUNIPER KITCHEN",
+        "RECEIPT JK-0042",
+        "Issue date: 2026-10-28",
+        "Currency: USD",
+        "Tax treatment: inclusive",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Lunch set     1    32.40    32.40",
+        "Line discounts: 0.00",
+        "",
+        "Subtotal (tax included): 32.40",
+        "Included tax: 2.40",
+        "Tax total: 2.40",
+        "Document discount: 0.00",
+        "Shipping: 0.00",
+        "Tip: 4.00",
+        "TOTAL USD 37.40",
+        "",
+        "Training example: totals require verification"
+      ]
+    ]
+  },
+  {
+    "id": "cedar",
+    "data": {
+      "documentType": "receipt",
+      "vendorName": "CEDAR MARKET",
+      "invoiceNumber": null,
+      "receiptNumber": "CM-0015",
+      "issueDate": null,
+      "dueDate": null,
+      "currency": null,
+      "lineItems": [
+        {
+          "description": "Notebook",
+          "quantity": "2",
+          "unitPrice": "20.00",
+          "discountAmount": null,
+          "lineTotal": "40.00"
+        }
+      ],
+      "taxes": [],
+      "subtotal": "40.00",
+      "taxTotal": null,
+      "discountTotal": null,
+      "shipping": null,
+      "tip": null,
+      "total": "40.00",
+      "taxMode": "unknown",
+      "lineItemsComplete": true
+    },
+    "text": [
+      [
+        "CEDAR MARKET",
+        "RECEIPT CM-0015",
+        "Date: 01/02/2026",
+        "Currency: not stated",
+        "",
+        "Description / Quantity / Unit price / Line total",
+        "Notebook     2    20.00    40.00",
+        "",
+        "Subtotal: 40.00",
+        "TOTAL 40.00",
+        "",
+        "Training example: confirm date and currency"
+      ]
+    ]
+  }
+]

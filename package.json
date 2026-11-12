@@ -1,0 +1,53 @@
+{
+  "name": "ai-invoice-receipt-processor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x",
+    "npm": ">=11"
+  },
+  "workspaces": [
+    "web",
+    "worker",
+    "shared"
+  ],
+  "scripts": {
+    "format": "prettier --write .",
+    "assets": "node scripts/assets.mjs",
+    "fixtures": "node scripts/fixtures.mjs",
+    "dev": "npm run assets && concurrently -k -n web,worker \"npm run dev -w web\" \"npm run dev -w worker\"",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "test:browser:install": "node scripts/browser.mjs install chromium",
+    "test:browser": "node scripts/browser.mjs test",
+    "build": "npm run assets && npm run build -w web && npm run build -w worker",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run test:browser"
+  },
+  "overrides": {
+    "minimatch@>=7.0.0 <11.0.1": "11.0.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@cloudflare/workers-types": "5.20261110.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.0",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.9",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "concurrently": "9.2.5",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.0.0",
+    "jsdom": "29.0.0",
+    "pdf-lib": "1.17.1",
+    "prettier": "3.6.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vitest": "5.1.0"
+  }
+}

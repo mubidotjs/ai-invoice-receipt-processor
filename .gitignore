@@ -1,0 +1,16 @@
+node_modules/
+.npm-cache/
+.cache/
+**/dist/
+**/.wrangler/
+**/.cache/
+web/public/assets/
+web/public/samples/
+test-results/
+playwright-report/
+coverage/
+.env*
+!.env.example
+.dev.vars*
+.vercel/
+tmp/

@@ -1,0 +1,16 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/wrangler.mjs dev --local --ip 127.0.0.1 --port 8788",
+    "build": "node scripts/wrangler.mjs deploy --dry-run --outdir dist"
+  },
+  "dependencies": {
+    "@invoice/shared": "*"
+  },
+  "devDependencies": {
+    "wrangler": "4.160.0"
+  }
+}
