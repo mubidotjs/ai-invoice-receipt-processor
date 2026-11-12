@@ -109,7 +109,7 @@ describe('source evidence applies to AI values', () => {
   it('rejects unsupported values even with a source quote', () => {
     const x = simple();
     x.data.total = '99.00';
-    expect(() => validateAIOutput(x, pages)).toThrow('Unsupported');
+    expect(() => validateAIOutput(x, pages)).toThrow('Model output was rejected');
   });
   it('rejects missing evidence and ambiguous dollar currency', () => {
     const x = simple();

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-12T11:44:29.152Z",
+  "historicalBase": "4fecc9035f537729e367666c5b5e72d7a101921c",
+  "historicalSafeWorker": "c8b89a14-9973-4820-92d4-273459c12343",
+  "historicalWorkerEtag": "4dfafaf3bf01593e8f98e47b799cdca79a3f66bf6c712f3a5382f8a3d19b9589",
+  "realInferenceAttemptsThisTask": 0,
+  "realTurnstileChallengesThisTask": 0,
+  "productionLiveEnabled": false,
+  "frontendProductionAndPreviewLiveEnabled": false,
+  "providerSchema": {
+    "date": "2026-11-12T11:43:14.146Z",
+    "schemaBytes": 3601,
+    "sha256": "733d9032d659d1e18cf728d284101f58c88e4b11c3ac95b8907b636d1cb6c6bd",
+    "closedObjects": 5,
+    "requiredProperties": 30,
+    "jsonTreeDepth": 8,
+    "contractUnchanged": true,
+    "providerGrammarAcceptance": "Not verified; no inference in this task"
+  },
+  "tests": {
+    "unitIntegration": 174,
+    "testFiles": 9,
+    "browser": 18,
+    "typecheck": "pass",
+    "lint": "pass",
+    "builds": "pass",
+    "dependencyAuditFindings": 0
+  },
+  "historicalCauses": {
+    "harbor": "Indeterminate: generic client message concealed the backend stage; no historical response recovered.",
+    "saffron": "Confirmed model-output acceptance failure; envelope/JSON/schema/evidence sub-cause indeterminate without retained output or safe stage metadata."
+  },
+  "fixes": [
+    "Documented Workers response object wrapper now unwrapped before strict validation; exact Gemma chat content remains string-only.",
+    "Explicit stop/assistant required; refusal, legacy function calls, malformed/ambiguous envelopes and full response size rejected.",
+    "Content-free stage/code/allowlisted path diagnostics.",
+    "Named-date evidence scans all supported dates; ISO numeric token boundaries tightened.",
+    "Same-origin Ledger Lens SVG favicon matching existing L/dot mark."
+  ],
+  "unchanged": [
+    "model and response_format contract",
+    "authoritative Zod contracts",
+    "decimal arithmetic",
+    "evidence quote membership and populated-field support",
+    "review/provenance/export gates",
+    "Turnstile credentials and verification",
+    "native limiter thresholds and namespaces",
+    "DNS and unrelated services"
+  ]
+}

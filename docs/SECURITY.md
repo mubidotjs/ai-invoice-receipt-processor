@@ -26,6 +26,8 @@ Native throttles are 2 visitor attempts and 5 project attempts per 60s. Counters
 
 Production rejects known Turnstile test-key patterns. Local test widget/secret strings exist only in test files; they do not create a real verification integration or enable the default application. Production secrets are absent from tracked files and frontend configuration. The separately authorized E1 CLI login keeps OAuth state in ignored, workspace-scoped tooling configuration; the Turnstile secret exists only as an encrypted Worker secret. Never publish those ignored files.
 
+Rejection diagnostics contain only fixed stage/issue categories and allowlisted schema paths. No Zod issue messages, arbitrary keys, provider error objects, document text, field values, tokens or response bodies are logged. Persistent observability remains disabled. See the [offline diagnosis](AI-OUTPUT-DIAGNOSIS.md).
+
 ## Cost controls
 
 No billing activation, paid fallback, credits, automatic upgrades, external commercial APIs, databases or additional paid services. Reverify model eligibility and account plans at Gate E. Workers AI's documented 10,000 neurons/day is account-wide, resets at 00:00 UTC (05:00 Karachi), and is shared with other apps. This project cannot reserve a share without additional state, which is outside scope. [Pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/), [rate-limit semantics](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/).
