@@ -24,7 +24,7 @@ export const LIMITS = Object.freeze({
   browserMs: 105000,
 });
 export const MODEL = '@cf/google/gemma-4-26b-a4b-it' as const;
-export const PROMPT_VERSION = 'invoice-v1' as const;
+export const PROMPT_VERSION = 'invoice-v2-evidence' as const;
 const text = (max: number) =>
   z
     .string()
