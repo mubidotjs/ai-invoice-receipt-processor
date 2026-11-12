@@ -1,8 +1,12 @@
-# Deployment: Gate E1 complete, E2 unauthorized
+# Deployment: branded production launch in verification
 
-The owner separately authorized Gate E1. Publication and the disabled deployment were verified on **2026-11-12**. Gate E2 remains unauthorized. Both committed enablement flags remain false. The default local environment has no remote bindings; only the explicit `production` environment has the independent deployed bindings.
+The owner separately authorized Gate E1 and subsequently authorized the branded hostname and Gate E2 production verification on **2026-11-12**. The default local environment has no remote bindings and remains disabled; only the explicit `production` environment has the independent deployed bindings and approved activation flags. Production model acceptance is in progress and must not be inferred from mocks.
 
-## Verified E1 deployment
+The canonical hostname is [invoice.mubashirhussain.dev](https://invoice.mubashirhussain.dev); the original Vercel URL remains available. Only a Dynadot `invoice` CNAME to Vercel's supplied `db955ab68dd01317.vercel-dns-017.com` was added, retaining the 300-second TTL and all original DNS records/nameservers. Both authoritative servers, public resolvers, Vercel association and HTTPS certificate validation passed. No ownership TXT record was required.
+
+Real production Turnstile verification passed on the branded hostname with server-validated action `invoice-extract`; a replayed token and a deliberately invalid token were rejected. The existing widget, sitekey, encrypted secret and native limiter namespaces were preserved. Before activation, the temporary no-inference verification page/header/diagnostic were removed. Siteverify now uses Workers-supported `redirect:manual` and rejects redirects; `redirect:error` had thrown before any upstream request. The production origins and Turnstile hostname lists contain exactly the branded host and original canonical Vercel host. Native aggregate configuration is verified as 5/60 seconds per location; isolated/global aggregate denial is not claimed.
+
+## Verified E1 baseline (historical)
 
 | Resource                         | Actual identity / evidence                                                                                                                                                                                                               |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

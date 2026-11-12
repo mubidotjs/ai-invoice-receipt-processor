@@ -17,8 +17,8 @@
       "name": "ai-invoice-receipt-processor",
       "workers_dev": true,
       "vars": {
-        "LIVE_AI_ENABLED": "false",
-        "ABUSE_CONTROLS_VERIFIED": "false",
+        "LIVE_AI_ENABLED": "true",
+        "ABUSE_CONTROLS_VERIFIED": "true",
         "ALLOWED_ORIGINS": "https://invoice.mubashirhussain.dev,https://ai-invoice-receipt-processor.vercel.app",
         "TURNSTILE_HOSTNAMES": "invoice.mubashirhussain.dev,ai-invoice-receipt-processor.vercel.app",
       },

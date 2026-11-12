@@ -115,17 +115,7 @@ const verifySchema = z.object({
   challenge_ts: z.iso.datetime().optional(),
   'error-codes': z.array(z.string().max(80)).max(10).optional(),
 });
-type VerificationDiagnostic = {
-  stage: 'request' | 'body' | 'schema' | 'status' | 'claims';
-  httpStatus?: number;
-  invalidFields?: string[];
-  failure?: string;
-};
-async function verifyTurnstile(
-  token: string,
-  env: Env,
-  diagnostic?: VerificationDiagnostic,
-): Promise<{ hostname: string; action: string }> {
+async function verifyTurnstile(token: string, env: Env): Promise<void> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
@@ -136,26 +126,16 @@ async function verifyTurnstile(
       body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
       signal: controller.signal,
     });
-    if (diagnostic) {
-      diagnostic.httpStatus = res.status;
-      diagnostic.stage = 'body';
-    }
     if (res.status >= 300 && res.status < 400)
       throw new ApiError('PROTECTION_UNAVAILABLE', 'Bot verification redirects are refused.', 503);
     const body = JSON.parse(await readBounded(res, 8192));
-    if (diagnostic) diagnostic.stage = 'schema';
     const verified = verifySchema.safeParse(body);
-    if (!verified.success && diagnostic)
-      diagnostic.invalidFields = verified.error.issues
-        .map((issue) => issue.path.join('.'))
-        .slice(0, 10);
     if (!verified.success)
       throw new ApiError(
         'PROTECTION_UNAVAILABLE',
         'Bot verification is unavailable. Local processing remains available.',
         503,
       );
-    if (diagnostic) diagnostic.stage = 'status';
     const codes = verified.data['error-codes'] ?? [];
     if (codes.some((code) => ['invalid-input-secret', 'missing-input-secret'].includes(code)))
       throw new ApiError(
@@ -172,7 +152,6 @@ async function verifyTurnstile(
         'Bot verification is unavailable. Local processing remains available.',
         503,
       );
-    if (diagnostic) diagnostic.stage = 'claims';
     if (
       !verified.data.success ||
       !split(env.TURNSTILE_HOSTNAMES).includes(verified.data.hostname ?? '') ||
@@ -183,11 +162,7 @@ async function verifyTurnstile(
         'Bot verification failed or expired. Complete a fresh challenge.',
         403,
       );
-    return { hostname: verified.data.hostname!, action: verified.data.action! };
   } catch (error) {
-    if (diagnostic)
-      diagnostic.failure =
-        error instanceof ApiError ? error.code : error instanceof Error ? error.name : 'unknown';
     if (error instanceof ApiError) throw error;
     throw new ApiError(
       'PROTECTION_UNAVAILABLE',
@@ -280,7 +255,7 @@ export default {
           headers: {
             'Access-Control-Allow-Origin': origin,
             'Access-Control-Allow-Methods': 'POST',
-            'Access-Control-Allow-Headers': 'Content-Type, X-Ledger-Protection-Check',
+            'Access-Control-Allow-Headers': 'Content-Type',
             Vary: 'Origin',
             'Cache-Control': 'no-store',
           },
@@ -325,37 +300,6 @@ export default {
       } catch (e) {
         if (e instanceof ApiError) throw e;
         throw new ApiError('PROTECTION_UNAVAILABLE', 'Request protection is unavailable.', 503);
-      }
-      // Temporary authorized E2 probe: remove before activation. It cannot reach AI.
-      if (request.headers.get('X-Ledger-Protection-Check') === '1') {
-        if (
-          env.LIVE_AI_ENABLED !== 'false' ||
-          env.ABUSE_CONTROLS_VERIFIED !== 'false' ||
-          !configured(env) ||
-          !ip
-        )
-          throw new ApiError(
-            'PROTECTION_UNAVAILABLE',
-            'Disabled verification is not configured.',
-            503,
-          );
-        const diagnostic: VerificationDiagnostic = { stage: 'request' };
-        try {
-          const verified = await verifyTurnstile(parsed.data.turnstileToken, env, diagnostic);
-          return json(
-            { status: 'protection-verified', ...verified, inference: false },
-            200,
-            allowed,
-          );
-        } catch (error) {
-          if (error instanceof ApiError)
-            return json(
-              { error: { code: error.code, message: error.message }, verification: diagnostic },
-              error.status,
-              allowed,
-            );
-          throw error;
-        }
       }
       if (env.LIVE_AI_ENABLED !== 'true')
         throw new ApiError(
