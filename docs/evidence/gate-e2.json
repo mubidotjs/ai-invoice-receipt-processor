@@ -1,0 +1,175 @@
+{
+  "observedAt": "2026-11-12T11:02:39.177Z",
+  "canonicalOrigin": "https://invoice.mubashirhussain.dev",
+  "retainedOrigin": "https://ai-invoice-receipt-processor.vercel.app",
+  "status": "branded-local-demo-verified; live-ai-acceptance-blocked",
+  "dns": {
+    "change": "invoice CNAME",
+    "target": "db955ab68dd01317.vercel-dns-017.com",
+    "ttlSeconds": 300,
+    "authoritativeAndPublicResolution": true,
+    "originalRecordsPreserved": true,
+    "nameserversUnchanged": true,
+    "ownershipTxtRequired": false
+  },
+  "certificate": {
+    "authorized": true,
+    "subject": {
+      "CN": "invoice.mubashirhussain.dev"
+    },
+    "issuer": {
+      "C": "US",
+      "O": "Let's Encrypt",
+      "CN": "YR2"
+    },
+    "validFrom": "Nov 12 05:07:56 2026 GMT",
+    "validTo": "Feb 10 05:07:55 2027 GMT",
+    "subjectAltName": "DNS:invoice.mubashirhussain.dev"
+  },
+  "baseline": {
+    "commit": "124f6a974fc84ee08d5a3169442843928595b7b7",
+    "vercelDeployment": "dpl_Es7DTdfVqFDidL4tpL922spEKRZP",
+    "workerVersion": "969cb007-b0fa-4512-8449-e9107376475d"
+  },
+  "applicationCommit": "023656b5e35a77109f27950be2cd8a2d8e83f053",
+  "verifiedProtection": {
+    "realSiteverify": true,
+    "hostname": "invoice.mubashirhussain.dev",
+    "action": "invoice-extract",
+    "legitimateStatus": 200,
+    "replayStatus": 403,
+    "invalidTokenStatus": 403,
+    "dummyTestTokenStatus": 403,
+    "observedNativeThrottleStatus": 429,
+    "aggregate": {
+      "namespace": "12002",
+      "limit": 5,
+      "periodSeconds": 60,
+      "configurationReadBack": true,
+      "isolatedOrGlobalDenialProven": false
+    },
+    "visitor": {
+      "namespace": "12001",
+      "limit": 2,
+      "periodSeconds": 60
+    },
+    "redirectPolicy": "manual; all 3xx rejected",
+    "secretUnchangedAndEncrypted": true,
+    "temporaryProbeRemoved": true
+  },
+  "modelBudget": {
+    "maximumActualInferenceAttempts": 3,
+    "attempts": [
+      {
+        "sequence": 1,
+        "fixture": "harbor",
+        "kind": "invoice",
+        "status": "guarded invoice submission failed; no draft applied; backend stage unconfirmed, conservatively consumes one budget slot",
+        "reservedAt": "2026-11-12T10:30:35.526Z",
+        "observedAt": "2026-11-12T10:37:02.696Z",
+        "uiMessage": "Cloud extraction is unavailable. Your document and manual entries remain local."
+      },
+      {
+        "sequence": 2,
+        "fixture": "saffron",
+        "kind": "receipt",
+        "status": "rejected by output acceptance; no draft applied",
+        "reservedAt": "2026-11-12T10:55:17.970Z",
+        "backendCode": "AI_INVALID_OUTPUT",
+        "nativeBindingReached": true,
+        "acceptedDraft": false,
+        "observedAt": "2026-11-12T11:00:19.949Z"
+      }
+    ],
+    "rules": "Sequential only; Harbor invoice, Saffron receipt, one explicit retry if genuinely needed. No automatic retry or paid fallback.",
+    "stopped": true,
+    "remainingUnused": 1,
+    "reason": "Both required positive cases remain unverified; one remaining slot cannot complete both. No further inference authorized within this run."
+  },
+  "aiAcceptedDrafts": 0,
+  "fieldAccuracyComparisons": "Not performed: neither attempt yielded an accepted AI draft. No model accuracy claim.",
+  "manualDownloads": {
+    "observedAt": "2026-11-12T10:05:11.181Z",
+    "source": "Manual CUA actions on branded production, actual downloaded bytes read from returned file paths",
+    "mode": "sample",
+    "synthetic": true,
+    "correctedTotal": "36.40",
+    "provenance": "manual-correction",
+    "acknowledgedWarnings": ["SUBTOTAL", "GRAND_TOTAL"],
+    "csvFormulaNeutralized": true,
+    "csvQuotedComma": true,
+    "csvBom": true,
+    "rawDocumentAndOcrExcluded": true
+  },
+  "manualFallbackAfterCloudFailure": {
+    "observedAt": "2026-11-12T10:49:45.919Z",
+    "actualManualFallbackAfterCloudFailure": true,
+    "json": true,
+    "csv": true,
+    "mode": "manual",
+    "synthetic": true,
+    "vendor": "HARBOR STUDIO",
+    "invoiceNumber": "HBR-1042",
+    "total": "165.00",
+    "provenance": "manual-entry",
+    "noFabricatedEvidence": true,
+    "warningCodes": [
+      "UNKNOWN_DOCUMENT_TYPE",
+      "INCOMPLETE_LINES",
+      "SUBTOTAL",
+      "TAX_TOTAL",
+      "GRAND_TOTAL"
+    ]
+  },
+  "rollback": {
+    "workerVersion": "c8b89a14-9973-4820-92d4-273459c12343",
+    "vercelDeployment": "dpl_3UqxPteZyS6qg5aH1wEqjgXrEP25",
+    "LIVE_AI_ENABLED": false,
+    "ABUSE_CONTROLS_VERIFIED": true,
+    "VITE_LIVE_AI_ENABLED": {
+      "production": false,
+      "preview": false,
+      "localDefault": false
+    },
+    "healthStatus": 200,
+    "liveEnabled": false
+  },
+  "cost": {
+    "vercel": "hobby",
+    "workers": "free",
+    "billingChanged": false,
+    "paidFallback": false,
+    "aiGateway": false,
+    "quotaObservationBefore": "Today summary 0/10k, last-24h Gemma chart 31.98; shared/asynchronous, not an attributable usage measurement.",
+    "quotaObservationAfter": "Workers AI dashboard: 24.81/10k neurons used today; last-24h Gemma chart 56.79. Account-wide, asynchronous figures; not an exact per-project or per-call measurement."
+  },
+  "limitations": [
+    "No successful model-output acceptance within the bounded run.",
+    "First generic invoice failure did not expose its backend stage; counted conservatively.",
+    "Receipt returned AI_INVALID_OUTPUT; envelope/schema/evidence cause intentionally not exposed or logged.",
+    "Separate expired-token isolation, distributed abuse resistance and aggregate threshold denial were not demonstrated.",
+    "Provider/quota exhaustion failure scenarios remain mocked.",
+    "Dark theme is not implemented; existing light layout retained."
+  ],
+  "finalReadbackAt": "2026-11-12T11:18:54.607Z",
+  "productionLocalRegression": {
+    "report": "gate-e2-local-production.json",
+    "documents": 6,
+    "downloads": 12,
+    "assets": 228,
+    "assetBytes": 52994366,
+    "allAssetsSameOriginAndHashVerified": true,
+    "unexpectedExternalRequests": 0,
+    "widths": [390, 768, 1280],
+    "seriousOrCriticalAxeFindings": 0,
+    "actualViewportWidthsAsserted": true
+  },
+  "browserEvidenceBoundary": "Manual in-app production observations cover document processing, page navigation, consent, failed guarded submissions, correction, validation, downloads and keyboard operation. In-app viewport overrides did not resize its DOM; actual three-width responsive assertions and screenshots came from separate production Playwright runs, not a claimed manual three-width audit.",
+  "ci": {
+    "applicationCommit": "023656b5e35a77109f27950be2cd8a2d8e83f053",
+    "run": "https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43204278338",
+    "conclusion": "success",
+    "unitIntegrationTests": 119,
+    "browserTests": 18
+  }
+}

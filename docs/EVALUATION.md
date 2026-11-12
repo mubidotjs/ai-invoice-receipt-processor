@@ -1,26 +1,39 @@
 # Evaluation and gate evidence
 
-Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D were freshly reverified, followed by separately authorized **Gate E1 publication and disabled deployment**. No real inference or real Turnstile verification is claimed; E2 remains unauthorized.
+Evaluation date: **2026-11-12**, Asia/Karachi. Host: Windows 10, Node **24.22.1**, npm **11.16.0**. Gates A–D and Gate E1 passed. The owner subsequently authorized the branded domain and Gate E2. **Real production Turnstile passed, but two bounded AI submissions yielded no accepted draft. Live AI is disabled; Gate E2 remains incomplete.** The historical E1 observations below are retained with their original verification boundary.
 
 ## Observed checks
 
-| Check                     | Observed result                | Verification boundary                                                                                                      |
-| ------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| TypeScript                | Passed                         | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
-| ESLint                    | Passed, zero warnings          | Authored source; generated caches/builds excluded                                                                          |
-| Vitest                    | **102 passed**, six test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
-| Frontend build            | Passed                         | Vite production assets, lazy OCR/PDF imports                                                                               |
-| Worker bundle             | Passed                         | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
-| Playwright                | **18 passed**, final run 56.0s | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
-| Formatting                | Passed                         | Prettier check of source/config/docs                                                                                       |
-| Runtime dependency audit  | Zero findings                  | npm advisory database at evaluation time                                                                                   |
-| Complete dependency audit | Zero findings                  | Includes development tooling after the fixes described below                                                               |
-| Local workerd health      | HTTP 200, `liveEnabled:false`  | Actual local runtime only, no upstream call                                                                                |
-| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`   | Synthetic text only; no Siteverify or inference                                                                            |
+| Check                     | Observed result                  | Verification boundary                                                                                                      |
+| ------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript                | Passed                           | Strict shared/UI/Worker/test types, including the installed native AI adapter type                                         |
+| ESLint                    | Passed, zero warnings            | Authored source; generated caches/builds excluded                                                                          |
+| Vitest                    | **119 passed**, seven test files | Contracts, financial arithmetic, evidence, manual provenance, React review lifecycle, mocked cloud/protection and failures |
+| Frontend build            | Passed                           | Vite production assets, lazy OCR/PDF imports                                                                               |
+| Worker bundle             | Passed                           | `wrangler deploy --dry-run`; no deployment; flags false, remote bindings absent                                            |
+| Playwright                | **18 passed**                    | Actual local PDF/OCR, downloads, offline privacy, accessibility, cancellation, rejection and mocked AI browser paths       |
+| Formatting                | Passed                           | Prettier check of source/config/docs                                                                                       |
+| Runtime dependency audit  | Zero findings                    | npm advisory database at evaluation time                                                                                   |
+| Complete dependency audit | Zero findings                    | Includes development tooling after the fixes described below                                                               |
+| Local workerd health      | HTTP 200, `liveEnabled:false`    | Actual local runtime only, no upstream call                                                                                |
+| Local workerd extraction  | HTTP 503, `LIVE_AI_DISABLED`     | Synthetic text only; no Siteverify or inference                                                                            |
 
 The fresh E1 `npm ci` and `npm run check` exited successfully: 102 Vitest and 18 browser tests (55.9s), types, lint and both builds. The first installation hit an owned preview process holding a native module; stopping that preview and rerunning `npm ci` resolved it. The fresh suite used its managed servers. Earlier A–D Windows verification had used separately started servers because teardown had lingered. [Hosted CI run 43160690098](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43160690098) also passed using Ubuntu managed servers, without cloud credentials/inference.
 
-## Public E1 observations
+## Branded production / Gate E2 observations
+
+See [deployment and rollback](DEPLOYMENT.md), [real launch record](evidence/gate-e2.json) and [post-rollback local production regression](evidence/gate-e2-local-production.json). Verified application commit 023656b5e35a77109f27950be2cd8a2d8e83f053 passed [hosted CI 43204278338](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43204278338): 119 unit/integration and 18 browser tests plus types/lint/builds.
+
+- The branded HTTPS domain resolves through the sole authorized invoice CNAME. Vercel Hobby/Workers Free and exact project identities were confirmed; no paid or unrelated resource changes.
+- Legitimate production Siteverify passed expected hostname/action; replay/invalid/dummy tokens failed. Workers-supported manual redirect handling fixed a genuine deployment blocker; temporary probes were removed. Native throttle denial was observed, aggregate configuration read back; isolated/global aggregate denial is not claimed.
+- Harbor's consented native-PDF submission failed with a generic unavailable message; backend stage unknown. Saffron's consented actual-OCR submission reached the native binding and failed AI_INVALID_OUTPUT. No draft was applied; zero model ground-truth/evidence comparisons passed. Two budget slots conservatively counted, one unused; no automatic retry or sample fallback.
+- Worker LIVE_AI_ENABLED=false and frontend Production/Preview VITE_LIVE_AI_ENABLED=false were deployed and read back. Production ABUSE_CONTROLS_VERIFIED=true records actual protection verification; local defaults remain false.
+- After rollback, all six actual local-processing paths and twelve downloaded exports passed on the branded site, with 228 same-origin assets / 52,994,366 bytes hash-verified, fresh contexts, no unexpected external requests and no page errors.
+- Actual in-app manual correction/downloads passed, including Juniper's mismatch, invalid-format blocking, revision reset, explicit warning acknowledgment and spreadsheet-safe CSV. After a real cloud error, Harbor manual-entry export worked with no invented evidence. Real-AI correction remains unverified because no accepted AI draft existed.
+- Separate production Playwright runs asserted actual 390/768/1280 widths, no overflow, keyboard skip links and zero serious/critical axe findings. In-app manual viewport overrides did not resize the DOM; a manual three-width audit is not claimed. Existing light theme retained.
+- Free quota dashboard ended at 24.81/10k today and 56.79 on its last-24h Gemma chart. These shared/asynchronous numbers are not per-project/call costs. No model accuracy, latency benchmark or provider-reliability metric is inferred from the failed attempts.
+
+## Public E1 observations (historical)
 
 Application/config commit `140802619c36c96c6fd027cbca63c46bc5870153` deployed READY as `dpl_xRnWVdHvAgsdBWNNmGa6jJQCpm3P`. Vercel build logs explicitly reported Node **24.22.3** and npm **11.19.1**. [Deployment identities and rollback](DEPLOYMENT.md) and the [machine-readable synthetic-only report](evidence/gate-e1.json) preserve the actual observations.
 
@@ -75,13 +88,13 @@ Separate browser tests prove a native page can be explicitly OCRed, 90-degree ro
 
 ## Gate status
 
-| Gate                                    | Status                      | Evidence                                                                                                                                                           |
-| --------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| A — Contracts/foundation                | Complete locally            | Independent workspaces, strict schemas, exact arithmetic, six authored fixtures, disabled defaults and reproducible lockfile                                       |
-| B — Local processing                    | Complete locally            | Actual native/scanned/mixed processing and complete externally blocked correction/export flow                                                                      |
-| C — AI/review/export                    | Complete locally with mocks | Consent, evidence/manual provenance, protected handler, failure behavior and export bytes                                                                          |
-| D — Release readiness                   | Complete locally            | Full checks, dependency review, responsive/accessibility checks, architecture/privacy/evaluation and launch/rollback documentation                                 |
-| E1 — Disabled public launch             | Complete                    | Published source/hosted CI; Vercel Hobby, disabled Workers Free service and separate Turnstile; six public processing/export workflows and bundled assets verified |
-| E2 — Real protection/model verification | Not authorized or performed | Exact model eligibility/license/output behavior, shared quota, real Siteverify and explicitly bounded inference still require owner authorization                  |
+| Gate                                    | Status                             | Evidence                                                                                                                                                           |
+| --------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A — Contracts/foundation                | Complete locally                   | Independent workspaces, strict schemas, exact arithmetic, six authored fixtures, disabled defaults and reproducible lockfile                                       |
+| B — Local processing                    | Complete locally                   | Actual native/scanned/mixed processing and complete externally blocked correction/export flow                                                                      |
+| C — AI/review/export                    | Complete locally with mocks        | Consent, evidence/manual provenance, protected handler, failure behavior and export bytes                                                                          |
+| D — Release readiness                   | Complete locally                   | Full checks, dependency review, responsive/accessibility checks, architecture/privacy/evaluation and launch/rollback documentation                                 |
+| E1 — Disabled public launch             | Complete                           | Published source/hosted CI; Vercel Hobby, disabled Workers Free service and separate Turnstile; six public processing/export workflows and bundled assets verified |
+| E2 — Real protection/model verification | Attempted; incomplete; AI disabled | Branded domain and real protection passed; no accepted model draft in two bounded submissions; further live testing requires a new explicit budget                 |
 
 No model field-accuracy score, general hallucination rate, production availability, shared-quota reservation or distributed abuse-resistance claim is made. Source text and mechanical evidence checks do not establish authenticity or semantic truth. Every financial value remains subject to human verification.
