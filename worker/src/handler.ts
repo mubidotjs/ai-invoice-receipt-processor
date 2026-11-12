@@ -115,9 +115,16 @@ const verifySchema = z.object({
   challenge_ts: z.iso.datetime().optional(),
   'error-codes': z.array(z.string().max(80)).max(10).optional(),
 });
+type VerificationDiagnostic = {
+  stage: 'request' | 'body' | 'schema' | 'status' | 'claims';
+  httpStatus?: number;
+  invalidFields?: string[];
+  failure?: string;
+};
 async function verifyTurnstile(
   token: string,
   env: Env,
+  diagnostic?: VerificationDiagnostic,
 ): Promise<{ hostname: string; action: string }> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
@@ -129,13 +136,24 @@ async function verifyTurnstile(
       body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
       signal: controller.signal,
     });
-    const verified = verifySchema.safeParse(JSON.parse(await readBounded(res, 8192)));
+    if (diagnostic) {
+      diagnostic.httpStatus = res.status;
+      diagnostic.stage = 'body';
+    }
+    const body = JSON.parse(await readBounded(res, 8192));
+    if (diagnostic) diagnostic.stage = 'schema';
+    const verified = verifySchema.safeParse(body);
+    if (!verified.success && diagnostic)
+      diagnostic.invalidFields = verified.error.issues
+        .map((issue) => issue.path.join('.'))
+        .slice(0, 10);
     if (!verified.success)
       throw new ApiError(
         'PROTECTION_UNAVAILABLE',
         'Bot verification is unavailable. Local processing remains available.',
         503,
       );
+    if (diagnostic) diagnostic.stage = 'status';
     const codes = verified.data['error-codes'] ?? [];
     if (codes.some((code) => ['invalid-input-secret', 'missing-input-secret'].includes(code)))
       throw new ApiError(
@@ -152,6 +170,7 @@ async function verifyTurnstile(
         'Bot verification is unavailable. Local processing remains available.',
         503,
       );
+    if (diagnostic) diagnostic.stage = 'claims';
     if (
       !verified.data.success ||
       !split(env.TURNSTILE_HOSTNAMES).includes(verified.data.hostname ?? '') ||
@@ -164,6 +183,9 @@ async function verifyTurnstile(
       );
     return { hostname: verified.data.hostname!, action: verified.data.action! };
   } catch (error) {
+    if (diagnostic)
+      diagnostic.failure =
+        error instanceof ApiError ? error.code : error instanceof Error ? error.name : 'unknown';
     if (error instanceof ApiError) throw error;
     throw new ApiError(
       'PROTECTION_UNAVAILABLE',
@@ -315,8 +337,23 @@ export default {
             'Disabled verification is not configured.',
             503,
           );
-        const verified = await verifyTurnstile(parsed.data.turnstileToken, env);
-        return json({ status: 'protection-verified', ...verified, inference: false }, 200, allowed);
+        const diagnostic: VerificationDiagnostic = { stage: 'request' };
+        try {
+          const verified = await verifyTurnstile(parsed.data.turnstileToken, env, diagnostic);
+          return json(
+            { status: 'protection-verified', ...verified, inference: false },
+            200,
+            allowed,
+          );
+        } catch (error) {
+          if (error instanceof ApiError)
+            return json(
+              { error: { code: error.code, message: error.message }, verification: diagnostic },
+              error.status,
+              allowed,
+            );
+          throw error;
+        }
       }
       if (env.LIVE_AI_ENABLED !== 'true')
         throw new ApiError(
