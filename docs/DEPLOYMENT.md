@@ -11,13 +11,13 @@ An [offline diagnosis and narrowly scoped correction](AI-OUTPUT-DIAGNOSIS.md) fo
 | Canonical frontend               | [invoice.mubashirhussain.dev](https://invoice.mubashirhussain.dev), HTTPS 200                                                                                                                                               |
 | Preserved frontend               | [ai-invoice-receipt-processor.vercel.app](https://ai-invoice-receipt-processor.vercel.app)                                                                                                                                  |
 | Repository                       | [mubidotjs/ai-invoice-receipt-processor](https://github.com/mubidotjs/ai-invoice-receipt-processor), protected main; required check, no force push                                                                          |
-| Verified application source      | 023656b5e35a77109f27950be2cd8a2d8e83f053; [CI 43204278338](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43204278338) passed: 119 unit/integration tests, 18 browser tests, types, lint and builds |
+| Verified application source      | db21ea200f11034249e338d745d4628adebc8c99; [CI 43212386396](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43212386396) passed: 174 unit/integration tests, 18 browser tests, types, lint and builds |
 | Vercel project                   | ai-invoice-receipt-processor, prj_hRfp70QSVa7ab6XvU1R1PcpxFIRB, personal mubidotjs-projects scope, Hobby                                                                                                                    |
-| Verified disabled frontend build | dpl_3UqxPteZyS6qg5aH1wEqjgXrEP25, READY; both public hosts associated; application commit above                                                                                                                             |
+| Verified disabled frontend build | dpl_CqSani8FpugrTvHrDYGjsvQWAVxE, READY; both public hosts associated; application commit above                                                                                                                             |
 | Actual hosted toolchain          | Build logs: Node v24.22.3, npm 11.19.1                                                                                                                                                                                      |
 | Build                            | Root install: node --version && npm --version && npm ci --cache .npm-cache; build: npm run assets && npm run build -w web; output web/dist; static assets only                                                              |
 | Worker                           | [health](https://ai-invoice-receipt-processor.mubikhan69.workers.dev/health), existing service ai-invoice-receipt-processor                                                                                                 |
-| Current safe Worker version      | c8b89a14-9973-4820-92d4-273459c12343; health 200, liveEnabled false                                                                                                                                                         |
+| Current safe Worker version      | 8b045abd-dfe8-4379-b3c2-7b906d437333; health 200, liveEnabled false                                                                                                                                                         |
 | Worker flags                     | LIVE_AI_ENABLED=false; ABUSE_CONTROLS_VERIFIED=true (real protection verified)                                                                                                                                              |
 | Frontend flag                    | VITE_LIVE_AI_ENABLED=false in Production and Preview; local default false                                                                                                                                                   |
 | Production public configuration  | VITE_WORKER_URL is the existing Ledger Lens Worker; VITE_TURNSTILE_SITE_KEY is 0x4AAAAAAF9u_exNZlyI1Aql; no browser secret                                                                                                  |
@@ -26,6 +26,12 @@ An [offline diagnosis and narrowly scoped correction](AI-OUTPUT-DIAGNOSIS.md) fo
 | Plans                            | Vercel Hobby and Workers Free ($0 current plan) confirmed; no billing, paid fallback, AI Gateway or infrastructure additions                                                                                                |
 
 These identifiers name the actual build/version used for acceptance. A later documentation/configuration-only main commit may trigger a successor Vercel build with the same disabled application; use its GitHub/Vercel history for the final publication SHA. CI never deploys the Worker.
+
+## Offline correction release (AI remains disabled)
+
+Application commit db21ea200f11034249e338d745d4628adebc8c99 passed [main CI 43212386396](https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43212386396), following [reviewed correction PR 6](https://github.com/mubidotjs/ai-invoice-receipt-processor/pull/6). Worker version **8b045abd-dfe8-4379-b3c2-7b906d437333** and frontend **dpl_CqSani8FpugrTvHrDYGjsvQWAVxE** were deployed and verified with live flags false; verified protection, native bindings, credentials and exact hosts are unchanged. Build logs confirm Node 24.22.3/npm 11.19.1.
+
+The [post-correction public regression](evidence/gate-e2-offline-production.json) passed all six actual OCR/PDF workflows, twelve corrected JSON/CSV downloads, 228 same-origin assets with SHA-256/size verification, responsive/accessibility checks and disabled/origin/request/throttle paths. Fresh contexts blocked external/non-GET requests. No model call or production challenge occurred. The public favicon returned 200/image/svg+xml and exactly matched its committed blob; both public hostnames returned 200. [Diagnosis, fixes and limitations](AI-OUTPUT-DIAGNOSIS.md) and [release identities](evidence/gate-e2-offline-diagnosis.json) distinguish constructed responses from real provider evidence. Gate E2 remains incomplete.
 
 ## DNS and HTTPS
 
@@ -88,7 +94,7 @@ On Windows, use the workspace .cache/browsers path for PLAYWRIGHT_BROWSERS_PATH.
 
 ## Rollback and remaining launch requirements
 
-Current safe state is the rollback target: Worker **c8b89a14-9973-4820-92d4-273459c12343**, disabled frontend build **dpl_3UqxPteZyS6qg5aH1wEqjgXrEP25**, branded DNS retained. Do not restore the original E1 Worker if doing so would remove the branded allowlist.
+Current corrected safe state is the rollback target: Worker **8b045abd-dfe8-4379-b3c2-7b906d437333**, disabled frontend build **dpl_CqSani8FpugrTvHrDYGjsvQWAVxE**, branded DNS retained. The earlier safe Worker c8b89a14-9973-4820-92d4-273459c12343 remains a disabled fallback without the offline corrections. Do not restore the original E1 Worker if doing so would remove the branded allowlist.
 
 To stop new inference, set only this Worker's LIVE_AI_ENABLED=false and deploy the reviewed production configuration from worker/ with node scripts/wrangler.mjs deploy --env production. Set this project's Production VITE_LIVE_AI_ENABLED=false and rebuild/redeploy the existing Vercel project; environment edits alone do not update static assets. Leave previews/local disabled. If protection ceases to be verified, also restore ABUSE_CONTROLS_VERIFIED=false. Never expose the secret or alter unrelated projects. Waiting deadlines cannot cancel computation already admitted by the provider.
 
