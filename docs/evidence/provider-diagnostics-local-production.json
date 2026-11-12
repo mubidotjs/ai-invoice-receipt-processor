@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-12T15:26:18.162Z",
+  "origin": "https://invoice.mubashirhussain.dev",
+  "worker": "https://ai-invoice-receipt-processor.mubikhan69.workers.dev",
+  "documents": [
+    {
+      "id": "harbor",
+      "methods": ["PDF text"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 6
+    },
+    {
+      "id": "saffron",
+      "methods": ["OCR"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 8
+    },
+    {
+      "id": "northstar",
+      "methods": ["OCR", "OCR"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 10
+    },
+    {
+      "id": "alder",
+      "methods": ["PDF text", "OCR"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 10
+    },
+    {
+      "id": "juniper",
+      "methods": ["OCR"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 8
+    },
+    {
+      "id": "cedar",
+      "methods": ["OCR"],
+      "json": true,
+      "csv": true,
+      "manualProvenance": true,
+      "synthetic": true,
+      "externalRequests": 0,
+      "requestCount": 8
+    }
+  ],
+  "accessibility": [
+    {
+      "width": 390,
+      "overflow": false,
+      "seriousOrCriticalViolations": 0,
+      "keyboardSkipLink": true
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "seriousOrCriticalViolations": 0,
+      "keyboardSkipLink": true
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "seriousOrCriticalViolations": 0,
+      "keyboardSkipLink": true
+    }
+  ],
+  "assets": {
+    "checked": 228,
+    "totalBytes": 52994366,
+    "allSameOrigin": true,
+    "sha256Verified": true
+  },
+  "protection": {
+    "health": {
+      "status": "ok",
+      "schemaVersion": "1",
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "liveEnabled": false
+    },
+    "preflight": 204,
+    "deniedOrigin": 403,
+    "malformedRequest": 400,
+    "attempts": [
+      {
+        "status": 503,
+        "code": "LIVE_AI_DISABLED"
+      },
+      {
+        "status": 503,
+        "code": "LIVE_AI_DISABLED"
+      },
+      {
+        "status": 503,
+        "code": "LIVE_AI_DISABLED"
+      },
+      {
+        "status": 429,
+        "code": "RATE_LIMITED"
+      }
+    ],
+    "aggregateExhaustionTested": false,
+    "realTurnstileVerification": false,
+    "realInference": false
+  },
+  "headers": {
+    "status": 200,
+    "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://challenges.cloudflare.com; worker-src 'self'; connect-src 'self' https://challenges.cloudflare.com https://ai-invoice-receipt-processor.mubikhan69.workers.dev; img-src 'self' blob: data:; font-src 'self' blob:; style-src 'self' 'unsafe-inline'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    "nosniff": true,
+    "noReferrer": true
+  }
+}

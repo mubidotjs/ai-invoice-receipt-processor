@@ -70,5 +70,31 @@
     "format": "pass",
     "dependencyAuditFindings": 0,
     "cloud": "mocked only"
+  },
+  "disabledRelease": {
+    "applicationCommit": "5355c172330f60a6f5f27f0666fdd0ad4040fe73",
+    "ci": {
+      "url": "https://github.com/mubidotjs/ai-invoice-receipt-processor/actions/runs/43247599418",
+      "conclusion": "success"
+    },
+    "worker": {
+      "version": "b4541598-3558-4d85-abe4-689ecce3505a",
+      "etag": "0f0005fcf51316db79034d8ed556a836bf16b83309ff93bb58850259768e5161",
+      "LIVE_AI_ENABLED": false,
+      "ABUSE_CONTROLS_VERIFIED": true,
+      "bindingsUnchanged": true
+    },
+    "vercel": {
+      "deployment": "dpl_CqDe4pSf2qkD8E3zHmAhaKW5UZLk",
+      "state": "READY",
+      "node": "24.22.3",
+      "npm": "11.19.1",
+      "productionLiveEnabled": false,
+      "previewLiveEnabled": false
+    },
+    "localDefaultLiveEnabled": false,
+    "publicWorkflowReport": "provider-diagnostics-local-production.json",
+    "realInferenceCalls": 0,
+    "realTurnstileChallenges": 0
   }
 }
